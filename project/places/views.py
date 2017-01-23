@@ -42,7 +42,7 @@ def getPlaces():
 ### routes ###
 ##############
 
-@places_blueprint.route('/')
+@places_blueprint.route('/', methods=['GET','POST'])
 def places():
 	return render_template(
 		'places.html',

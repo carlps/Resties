@@ -5,7 +5,9 @@
 	<h1><a href="/">Resties</a></h1>
 	<div class=metanav>
 		{% if not session.logged_in %}
-		  <a href="/register">log in</a>
+		  <a href="/login">log in</a> 
+		  or
+		  <a href="/register">register</a>
 		{% else %}
 		 <a href="/logout">log out</a>
 		{% endif %}

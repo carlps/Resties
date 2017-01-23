@@ -6,4 +6,3 @@ __pycache__
 .coverage
 htmlcov
 _config.py
-set_env.sh

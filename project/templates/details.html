@@ -1,0 +1,22 @@
+{% extends "_base.html" %}
+{% block content %}
+<h1>{{ place.name }}</h1>
+<h2>{{ place.formatted_address }}</h2>
+<p>
+	{{ place.formatted_phone_number }}
+	<br/>
+	{% if place.opening_hours['open_now'] %}
+		Open now :)
+	{% else %}
+		Closed now :(
+	{% endif %}
+	<br/>
+	{% for day in place.opening_hours['weekday_text'] %}
+		{{ day }}
+		<br/>
+	{% endfor %}
+	<a target="_blank" href="{{ place.website }}">Link to Website</a>
+	<br/>
+	<a target="_blank" href="{{ place.url }}">Link to Google</a>
+</p>
+{% endblock %}

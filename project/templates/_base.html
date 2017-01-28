@@ -1,17 +1,31 @@
 <!doctype html>
-<title>Resties</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
-<div class=page>
-	<h1><a href="/">Resties</a></h1>
-	<div class=metanav>
-		{% if not session.logged_in %}
-		  <a href="/login">log in</a> 
-		  or
-		  <a href="/register">register</a>
-		{% else %}
-		 <a href="/logout">log out</a>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Resties</title>
+    <!-- Import Google Icon Font -->
+  	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  	<!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+  <body>
+  	<div>
+	<nav>
+	<div class="nav-wrapper">
+		<a href="/" class="brand-logo center">Resties</a>
+		<ul id="nav_mobile" class="left hide-on-med-and-down">
+			{% if not session.logged_in %}
+			<li><a href="/login">log in</a> </li>
+			<li><a href="/register">register</a></li>
+			{% else %}
+		 	<a href="/logout">log out</a>
 		{% endif %}
+		</ul>
 	</div>
+	</nav>
 	{% for message in get_flashed_messages() %}
 	 <div class=flash>{{ message }}</div>
 	 {% endfor %}
@@ -22,4 +36,9 @@
 
 	 {% block content %}
 	 {% endblock %}
-</div>
+	</div>
+	<!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
+  </body>
+</html>

@@ -1,10 +1,12 @@
 {% extends "_base.html" %}
 {% block content %}
-  <ul class=resties>
-  {% for place in places %}
-	<li><a href="{{ url_for('places.details', placeID = place.placeID) }}">{{ place.placeName }}</a></li>
-  {% else %}
-  	<li><em>Unbelievable. No places here so far</em>
-  {% endfor %}
-  </ul>
+  <div class="container">
+  	<ul class=resties>
+  	  {% for place in places %}
+	    <li><a href="{{ url_for('places.details', placeID = place.placeID) }}">{{ place.placeName }}</a></li>
+  	  {% else %}
+  	    <li><em>Unbelievable. No places here so far</em>
+  	  {% endfor %}
+    </ul>	
+  </div>
 {% endblock %}

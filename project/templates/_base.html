@@ -16,13 +16,22 @@
 	<nav>
 	<div class="nav-wrapper">
 		<a href="/" class="brand-logo center">Resties</a>
-		<ul id="nav_mobile" class="left hide-on-med-and-down">
-			{% if not session.logged_in %}
+		<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+		<ul class="left hide-on-med-and-down">
+		  {% if not session.logged_in %}
 			<li><a href="/login">log in</a> </li>
 			<li><a href="/register">register</a></li>
-			{% else %}
+		  {% else %}
 		 	<a href="/logout">log out</a>
-		{% endif %}
+		  {% endif %}
+		</ul>
+		<ul class="side-nav" id="mobile-demo">
+		  {% if not session.logged_in %}
+			<li><a href="/login">log in</a> </li>
+			<li><a href="/register">register</a></li>
+		  {% else %}
+		 	<a href="/logout">log out</a>
+		  {% endif %}
 		</ul>
 	</div>
 	</nav>
@@ -40,5 +49,6 @@
 	<!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/init.js') }}"></script>
   </body>
 </html>

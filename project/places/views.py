@@ -36,7 +36,11 @@ def login_required(test):
 
 def getPlaces():
 	# should filter to where user id id logged in user ID
-	return db.session.query(Place).order_by(Place.placeName.desc())
+	if 'logged_in' not in session:
+		userID = 1 # placeholder for now
+	else: 
+		userID = session['userID']
+	return db.session.query(Place).filter_by(userID=userID).order_by(Place.placeName.desc())
 
 ##############
 ### routes ###
@@ -58,3 +62,4 @@ def details(placeID):
 	)
 
 # have a search for places and add them to db
+# need to update places because place_id shouldn't be unique -- maybe composite key w place+user

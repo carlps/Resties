@@ -27,7 +27,7 @@ def login_required(test):
 	test is whether or not the user is logged in
 	if logged in: allow, else: redirect'''
 	@wraps(test)
-	def wrap(*arg, **kwargs):
+	def wrap(*args, **kwargs):
 		if 'logged_in' in session:
 			return test(*args, **kwargs)
 		else:
@@ -45,10 +45,10 @@ def logout():
 	'''remove logged in and user credentials
 	from session. redirect to login page'''
 	session.pop('logged_in', None)
-	session.pop('user_id', None)
+	session.pop('userID', None)
 	session.pop('role', None)
 	flash('Goodbye!')
-	return redirect(url_for('users.login'))
+	return redirect(url_for('places.places'))
 
 @users_blueprint.route('/login', methods=['GET','POST'])
 def login():
@@ -57,18 +57,16 @@ def login():
 
 	error = None
 	form = LoginForm(request.form)
-	print('ayyyy')
 	if request.method == 'POST':
-		print('lmao')
 		if form.validate_on_submit():
 			user = User.query.filter_by(userName=request.form['name']).first()
 			if user is not None and bcrypt.check_password_hash(
-					user.password,request.form['password']):
+					user.password, request.form['password']):
 				session['logged_in'] = True
-				session['user_id'] = user.id
+				session['userID'] = user.userID
 				session['role'] = user.role
-				flash('Welcome {}!'.format(user.name))
-				redirect(url_for('places.places'))
+				flash('Welcome {}!'.format(user.userName))
+				return redirect(url_for('places.places'))
 			else:
 				error = 'Invalid username or password'
 		else:

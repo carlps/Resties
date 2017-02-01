@@ -52,9 +52,6 @@ def logout():
 
 @users_blueprint.route('/login', methods=['GET','POST'])
 def login():
-
-	# For some reason, when click submit, the request.method post does nothing.
-
 	error = None
 	form = LoginForm(request.form)
 	if request.method == 'POST':
@@ -65,7 +62,7 @@ def login():
 				session['logged_in'] = True
 				session['userID'] = user.userID
 				session['role'] = user.role
-				flash('Welcome {}!'.format(user.userName))
+				flash('Welcome {}!'.format(user.userName)) #can I make flash a toast?
 				return redirect(url_for('places.places'))
 			else:
 				error = 'Invalid username or password'

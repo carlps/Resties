@@ -6,7 +6,7 @@
 
 from functools import wraps
 from flask import (flash, redirect, render_template, 
-				  request, session, url_for, Blueprint)
+				  request, session, url_for, Blueprint, abort)
 
 from project import db
 from project.models import Place, GooglePlace
@@ -55,11 +55,14 @@ def places():
 @places_blueprint.route('/details/<string:placeID>')
 def details(placeID):
 	place = GooglePlace(placeID)
-	print(place.formatted_address)
+	if 'logged_in' in session:
+		notes = db.session.query(Place).filter_by(placeID=placeID,userID=session['userID']).first().notes
+	else:
+		notes = None
 	return render_template(
 		'details.html',
-		place=place
+		place=place,
+		notes=notes
 	)
 
 # have a search for places and add them to db
-# need to update places because place_id shouldn't be unique -- maybe composite key w place+user

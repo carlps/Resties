@@ -20,7 +20,7 @@ class Place(db.Model):
 		self.userID = userID
 
 	def __repr__(self):
-		return '<name {0}>'.format(self.name)
+		return '<name {0}>'.format(self.placeName)
 
 class User(db.Model):
 	

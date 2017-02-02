@@ -11,7 +11,7 @@ class Place(db.Model):
 	placeID = db.Column(db.String, primary_key=True)
 	placeName = db.Column(db.String, nullable=False)
 	notes = db.Column(db.String, nullable=True)
-	userID = db.Column(db.Integer, db.ForeignKey('users.userID'))
+	userID = db.Column(db.Integer, db.ForeignKey('users.userID'), primary_key=True)
 
 	def __init__(self, placeID, placeName, notes, userID):
 		self.placeID = placeID
@@ -41,6 +41,22 @@ class User(db.Model):
 
 	def __repr__(self):
 		return '<User {)}>'.format(self.userName)
+
+class Visit(db.Model):
+
+	__tablename__ = 'visits'
+
+	visitID = db.Column(db.Integer, primary_key=True)
+	visitDate = db.Column(db.Date, nullable=False)
+	comments = db.Column(db.String, nullable=True)
+	userID = db.Column(db.Integer, db.ForeignKey('users.userID'))
+	placeID = db.Column(db.String, db.ForeignKey('places.placeID'))
+
+	def __init__(self, visitDate, comments, userID, placeID):
+		self.visitDate = visitDate
+		self.comments = comments
+		self.userID = userID
+		self.placeID = placeID
 
 class GooglePlace(object):
 	"""A place (usually restaurant or bar) as pulled from 

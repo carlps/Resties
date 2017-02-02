@@ -24,5 +24,18 @@
 	  Notes: {{ notes }}
 	  {% endif %}
     </p>
+    {% if visits %}
+      {% if visits.count() == 1 %}
+        You've been here 1 time.
+      {% else %}
+        You've been here {{ visits.count() }} times.
+      {% endif %}
+      {% for visit in visits %}
+        <br/>
+        On {{ visit.visitDate }} you said: "{{ visit.comments }}""
+      {% endfor %}
+    {% else %}
+      You've never been here!
+    {% endif %}
   </div>
 {% endblock %}

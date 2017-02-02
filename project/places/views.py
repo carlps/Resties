@@ -9,7 +9,7 @@ from flask import (flash, redirect, render_template,
 				  request, session, url_for, Blueprint, abort)
 
 from project import db
-from project.models import Place, GooglePlace
+from project.models import Place, GooglePlace, Visit
 
 ##############
 ### config ###
@@ -42,6 +42,13 @@ def getPlaces():
 		userID = session['userID']
 	return db.session.query(Place).filter_by(userID=userID).order_by(Place.placeName.desc())
 
+def getVisits(placeID):
+	if 'logged_in' not in session:
+		return None
+	else:
+		userID = session['userID']
+		return db.session.query(Visit).filter_by(userID=userID,placeID=placeID)
+
 ##############
 ### routes ###
 ##############
@@ -62,7 +69,8 @@ def details(placeID):
 	return render_template(
 		'details.html',
 		place=place,
-		notes=notes
+		notes=notes,
+		visits=getVisits(placeID)
 	)
 
 # have a search for places and add them to db

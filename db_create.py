@@ -7,7 +7,7 @@ db.create_all()
 
 
 #insert some test data
-
+'''
 db.session.add(
     User("admin", "ad@min.com", "admin", "admin")
 )
@@ -15,5 +15,5 @@ db.session.add(
 db.session.add(
 	Place('ChIJ-6zk5ZO3t4kRwi3BXpaCRjE', 'Momofuku CCDC','buns n tings', 1)
 )
-
+'''
 db.session.commit()

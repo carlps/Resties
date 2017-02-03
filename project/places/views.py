@@ -10,6 +10,7 @@ from flask import (flash, redirect, render_template,
 
 from project import db
 from project.models import Place, GooglePlace, Visit
+from .forms import VisitForm
 
 ##############
 ### config ###
@@ -26,7 +27,7 @@ def login_required(test):
 	test is whether or not the user is logged in
 	if logged in: allow, else: redirect'''
 	@wraps(test)
-	def wrap(*arg, **kwargs):
+	def wrap(*args, **kwargs):
 		if 'logged_in' in session:
 			return test(*args, **kwargs)
 		else:
@@ -73,4 +74,34 @@ def details(placeID):
 		visits=getVisits(placeID)
 	)
 
-# have a search for places and add them to db
+@places_blueprint.route('/addVisit/<string:placeID>', methods=['GET','POST'])
+#@login_required
+def addVisit(placeID):
+	error = None
+	place = GooglePlace(placeID)
+	form = VisitForm(request.form)
+	if request.method == 'POST':
+		if form.validate_on_submit():
+			newVisit = Visit(
+				form.visitDate.data,
+				form.comments.data,
+				session['userID'],
+				placeID
+			)
+			db.session.add(newVisit)
+			db.session.commit()
+			flash('Visit recorded! I hope you enjoyed!')
+			return redirect(url_for('places.details', placeID=placeID))
+	return render_template('addVisit.html', form=form, error=error, place=place)
+
+
+###############################################################################
+#################################### TODO #####################################
+###############################################################################
+### clean up home page. make it easier to find restie on your list			###
+### allow people to edit notes on places page								###
+### have a search for places and add them to db								###
+###																			###
+###############################################################################
+###############################################################################
+###############################################################################

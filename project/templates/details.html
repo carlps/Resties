@@ -24,6 +24,9 @@
 	  Notes: {{ notes }}
 	  {% endif %}
     </p>
+    <p>
+    <a href="{{ url_for('places.addVisit', placeID = place.placeID) }}">Record a visit to this restaurant</a>
+    <br/>
     {% if visits %}
       {% if visits.count() == 1 %}
         You've been here 1 time.
@@ -32,10 +35,11 @@
       {% endif %}
       {% for visit in visits %}
         <br/>
-        On {{ visit.visitDate }} you said: "{{ visit.comments }}""
+        On {{ visit.visitDate }} you said: "{{ visit.comments }}"
       {% endfor %}
     {% else %}
       You've never been here!
     {% endif %}
+    </p>
   </div>
 {% endblock %}

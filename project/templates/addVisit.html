@@ -1,0 +1,30 @@
+{% extends "_base.html" %}
+{% block content %}
+<div class="container">
+  <h3>Tell me about your visit to {{ place.name }}</h3>
+  <form method="POST" action="{{ url_for('places.addVisit', placeID=place.placeID) }}">
+  	{{ form.csrf_token }}
+  	<p>
+  		{{ form.visitDate(placeholder='Visit Date (mm/dd/yyyy)') }}
+  		{% if form.visitDate.errors %}
+  		  <span class="error">
+  		  	{% for error in form.visitDate.errors %}
+              {{ error }}
+            {% endfor %}
+  		  </span>
+  		{% endif %}
+  	</p>
+  	<p>
+  		{{ form.comments(placeholder='Comments') }}
+  		{% if form.comments.errors %}
+  		  <span class="error">
+  		  	{% for error in form.comments.errors %}
+              {{ error }}
+            {% endfor %}
+  		  </span>
+  		{% endif %}
+  	</p>
+  	<button class="btn btn-sm btn-success" type="submit">Record Visit</button>
+  </form>
+</div>
+{% endblock %}

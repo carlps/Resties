@@ -4,42 +4,52 @@
   	<h1>{{ place.name }}</h1>
   	<h2>{{ place.formatted_address }}</h2>
   	<p>
-	  {{ place.formatted_phone_number }}
-	  <br/>
-	  {% if place.opening_hours['open_now'] %}
-		Open now :)
-	  {% else %}
-		Closed now :(
-	  {% endif %}
-	  <br/>
-	  {% for day in place.opening_hours['weekday_text'] %}
-		{{ day }}
-		<br/>
-	  {% endfor %}
-	  <a target="_blank" href="{{ place.website }}">Link to Website</a>
-	  <br/>
-	  <a target="_blank" href="{{ place.url }}">Link to Google</a>
-	  <br />
-	  {% if notes %}
-	  Notes: {{ notes }}
-	  {% endif %}
+      <h4>Details</h4>
+  	  {{ place.formatted_phone_number }}
+  	  <br />
+  	  {% if place.opening_hours['open_now'] %}
+  		Open now :)
+  	  {% else %}
+  		Closed now :(
+  	  {% endif %}
+  	  <br/>
+  	  {% for day in place.opening_hours['weekday_text'] %}
+  		{{ day }}
+  		<br/>
+  	  {% endfor %}
+  	  <a target="_blank" href="{{ place.website }}">Link to Website</a>
+  	  <br/>
+  	  <a target="_blank" href="{{ place.url }}">Link to Google</a>
     </p>
+
     <p>
-    <a href="{{ url_for('places.addVisit', placeID = place.placeID) }}">Record a visit to this restaurant</a>
-    <br/>
-    {% if visits %}
-      {% if visits.count() == 1 %}
-        You've been here 1 time.
+      <h4>Notes</h4>
+      {% if notes %}
+        {{ notes }}
       {% else %}
-        You've been here {{ visits.count() }} times.
+        No notes.
       {% endif %}
-      {% for visit in visits %}
-        <br/>
-        On {{ visit.visitDate }} you said: "{{ visit.comments }}"
-      {% endfor %}
-    {% else %}
-      You've never been here!
-    {% endif %}
+      <br />
+      <a href="{{ url_for('places.editNotes', placeID = place.placeID) }}">Update Notes</a>
+    </p>
+    
+    <p>
+      <h4>Visits</h4>
+      <a href="{{ url_for('places.addVisit', placeID = place.placeID) }}">Record a visit to this restaurant</a>
+      <br/>
+      {% if visits %}
+        {% if visits.count() == 1 %}
+          You've been here 1 time.
+        {% else %}
+          You've been here {{ visits.count() }} times.
+        {% endif %}
+        {% for visit in visits %}
+          <br/>
+          On {{ visit.visitDate }} you said: "{{ visit.comments }}"
+        {% endfor %}
+      {% else %}
+        You've never been here!
+      {% endif %}
     </p>
   </div>
 {% endblock %}

@@ -14,3 +14,8 @@ class VisitForm(Form):
 	comments = StringField(
 		'Comments'
 	)
+
+class NotesForm(Form):
+	notes = StringField(
+		'Notes'
+	)

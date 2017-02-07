@@ -1,0 +1,13 @@
+{% extends "_base.html" %}
+{% block content %}
+  <div class="container">
+  	<h3>{{ place.placeName }}</h3>
+  	<form method="POST" action="{{ url_for('places.editNotes', placeID=place.placeID) }}">
+  	  {{ form.csrf_token }}
+  	  <p>
+  	    {{  form.notes(value=place.notes)  }}
+  	  </p>
+  	  <button class="btn btn-sm btn-success" type="submit">Update Notes</button>
+  	</form>
+  </div>
+{% endblock %}

@@ -1,21 +1,18 @@
 # project/places/forms.py
 
 from flask_wtf import Form
-from wtforms import StringField, DateField
+from wtforms import TextAreaField
+from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired
 from datetime import date
 
 class VisitForm(Form):
-	visitDate = DateField(
-        'Visit Date (mm/dd/yyyy)',
-        validators=[DataRequired()], format='%m/%d/%Y'
+	visitDate = DateField('Visit Date',
+        validators=[DataRequired()], format='%d %B, %Y')
 
-	)
-	comments = StringField(
-		'Comments'
-	)
+	comments = TextAreaField('Comments')
 
 class NotesForm(Form):
-	notes = StringField(
+	notes = TextAreaField(
 		'Notes'
 	)

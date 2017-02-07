@@ -3,8 +3,14 @@
   <div class="container">
     <h1>Welcome to Resties.</h1>
     <h3>Please register to begin listing restaurants.</h3>
-    <form method="POST" action="/register/">
-      {{ form.csrf_token }}
+      <div class="row">
+        <form  method="POST" action="{{ url_for('users.register') }}">
+          {{ form.csrf_token }}
+      </div>
+
+
+
+    
       <p>
         {{ form.name(placeholder="name") }}
         {% if form.name.errors %}

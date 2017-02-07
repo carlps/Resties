@@ -107,7 +107,6 @@ def editNotes(placeID):
 	'''temporary until I figure out how to javascript it in the details page'''
 	error = None
 	place = getPlace(placeID,session['userID'])
-	print(place.placeName)
 	form = NotesForm(request.form)
 	if request.method == 'POST':
 		place.notes = form.notes.data
@@ -122,7 +121,9 @@ def editNotes(placeID):
 ###############################################################################
 ### clean up home page. make it easier to find restie on your list			###
 ### allow people to edit notes on places page								###
-###	--temp workaround is editNotes page. need JS fo in page					###
+###	--temp workaround is editNotes page. need JS for in page				###
+### --also having a date auto pop'd when a note is added. 
+### --maybe like a table
 ### have a search for places and add them to db								###
 ###																			###
 ###############################################################################

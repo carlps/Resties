@@ -2,12 +2,18 @@
 {% block content %}
   <div class="container">
   	<h3>{{ place.placeName }}</h3>
-  	<form method="POST" action="{{ url_for('places.editNotes', placeID=place.placeID) }}">
-  	  {{ form.csrf_token }}
-  	  <p>
-  	    {{  form.notes(value=place.notes)  }}
-  	  </p>
-  	  <button class="btn btn-sm btn-success" type="submit">Update Notes</button>
-  	</form>
+  	<div class="row">
+  	  <form class="col s12" method="POST" action="{{ url_for('places.editNotes', placeID=place.placeID) }}">
+  	    {{ form.csrf_token }}
+  	    <div class="row">
+  	    	<div class="input-field col s12">
+            {% set f = form.notes.process_data(place.notes) %}
+  	    	  {{  form.notes(class="materialize-textarea", id="textarea_notes") }}
+  	    		<label for="textarea_notes">Notes</label>
+  	    	</div>
+  	    </div>
+  	    <button class="btn btn-sm btn-success" type="submit">Update Notes</button>
+  	  </form>
+  	</div>
   </div>
 {% endblock %}

@@ -4,56 +4,67 @@
     <h1>Welcome to Resties.</h1>
     <h3>Please register to begin listing restaurants.</h3>
       <div class="row">
-        <form  method="POST" action="{{ url_for('users.register') }}">
+        <form class="col s12"  method="POST" action="{{ url_for('users.register') }}">
           {{ form.csrf_token }}
+          <div class="row">
+            <div class="input-field col s12">
+              {{ form.name(class="validate", id="name_input")}}
+              <label for="name_input">Username</label>
+              {% if form.name.errors %}
+                <span class="error">
+                  {% for error in form.name.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              {{ form.email(class="validate", id="email_input")}}
+              <label for="email_input">Email</label>
+              {% if form.email.errors %}
+                <span class="error">
+                  {% for error in form.email.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              {{ form.password(class="validate", id="password_input")}}
+              <label for="password_input">Password</label>
+              {% if form.password.errors %}
+                <span class="error">
+                  {% for error in form.password.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              {{ form.confirm(class="validate", id="confirm_input")}}
+              <label for="confirm_input">Confirm Password</label>
+              {% if form.confirm.errors %}
+                <span class="error">
+                  {% for error in form.confirm.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+          <button class="btn btn-sm btn-success" type="submit">Register</button>
+        </form>
       </div>
-
-
-
-    
-      <p>
-        {{ form.name(placeholder="name") }}
-        {% if form.name.errors %}
-          <span class="error">
-            {% for error in form.name.errors %}
-              {{ error }}
-            {% endfor %}
-          </span>
-        {% endif %}
-      </p>
-      <p>
-        {{ form.email(placeholder="email address") }}
-        {% if form.email.errors %}
-          <span class="error">
-            {% for error in form.email.errors %}
-              {{ error }}
-            {% endfor %}
-          </span>
-        {% endif %}
-      </p>
-      <p>
-        {{ form.password(placeholder="password") }}
-        {% if form.password.errors %}
-          <span class="error">
-            {% for error in form.password.errors %}
-              {{ error }}
-            {% endfor %}
-          </span>
-        {% endif %}
-      </p>
-      <p>
-        {{ form.confirm(placeholder="confirm password") }}
-        {% if form.confirm.errors %}
-          <span class="error">
-            {% for error in form.confirm.errors %}
-              {{ error }}
-            {% endfor %}
-          </span>
-        {% endif %}
-      </p>
-      <button class="btn btn-sm btn-success" type="submit">Register</button>
-      <br>
-      <p><em>Already registered?</em> Click <a href="/login">here</a> to login.</p>
-    </form>
+      <div class="row">
+        <div class="col">
+          <em>Already registered?</em> Click <a href="{{ url_for('users.login') }}">here</a> to login.
+        </div>
+      </div>
   </div>
 {% endblock %}

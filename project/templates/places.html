@@ -5,13 +5,24 @@
       <h2>Hello!</h2>
       <h3>Might I suggest <a href="/login">logging in</a> or <a href="/register"> signing up</a>?</h3>
   	{% else %}
-      <ul class=resties>
-    	  {% for place in places %}
-	        <li><a href="{{ url_for('places.details', placeID = place.placeID) }}">{{ place.placeName }}</a></li>
-  	    {% else %}
-  	     <li><em>Unbelievable. No places here so far.</em></li>
-  	    {% endfor %}
-      </ul>	
+      <div class="section">
+        {# set first_letter = 'A' #}
+        {% for place in places|sort(attribute='placeName') %}
+        <ul>
+          {% if place.placeName[0].upper() != first_letter %}
+            {% set first_letter = place.placeName[0].upper() %}
+            <li><h5>{{ first_letter }}</h5>  </li>
+            <div class="divider"></div>
+          {% endif %}
+          <ul>
+            <a href="{{ url_for('places.details', placeID = place.placeID) }}">{{ place.placeName }}</a>
+          </ul>
+        {% else %}
+          <p>Either you don't have any resties or something weird is going on.</p>
+        {% endfor %}
+        </ul>
+        <div class="divider"></div>
+      </div>
     {% endif %}
   </div>
 {% endblock %}

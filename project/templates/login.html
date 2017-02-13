@@ -4,33 +4,42 @@
 <div class="container">
   <h1>Welcome to Resties.</h1>
   <h3>Please sign in to access your restuarants list</h3>
-
-  <form class="form-signin" role="form" method="post" action="/login">
-    {{ form.csrf_token }}
-    <p>
-      {{ form.name(placeholder="name") }}
-        <span class="error">
+  <div class="row">
+    <form class="col s12" method="POST" action="{{ url_for('users.login') }}" role="form">
+      {{ form.csrf_token }}
+      <div class="row">
+        <div class="input-field col s12">
+          {{ form.name(class="validate",id="name_input") }}
+          <label for="name_input">Username</label>
           {% if form.name.errors %}
-            {% for error in form.name.errors %}
-              {{ error }}
-            {% endfor %}
+            <span class="error">
+              {% for error in form.name.errors %}
+                {{ error }}
+              {% endfor %}
+            </span>
           {% endif %}
-        </span>
-    </p>
-    <p>
-      {{ form.password(placeholder="password") }}
-      <span class="error">
-        {% if form.password.errors %}
-          {% for error in form.password.errors %}
-            {{ error }}
-          {% endfor %}
-        {% endif %}
-      </span>
-    </p>
-    <button class="btn btn-sm btn-success" type="submit">Sign in</button>
-    <br>
-    <br>
-    <p><em>Need an account? </em><a href="/register">Signup!!</a></p>
-  </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          {{ form.password(class="validate",id="password_input") }}
+          <label for="password_input">Password</label>
+          {% if form.password.errors %}
+            <span class="error">
+              {% for error in form.password.errors %}
+                {{ error }}
+              {% endfor %}
+            </span>
+          {% endif %}
+        </div>
+      </div>
+      <button class="btn btn-sm btn" type="submit">Sign in</button>
+    </form>    
+  </div>
+  <div class="row">
+    <div class="col">
+      <em>Need an account? </em><a href="/register">Signup!!</a>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -4,7 +4,7 @@
     <h1>Welcome to Resties.</h1>
     <h3>Please register to begin listing restaurants.</h3>
       <div class="row">
-        <form class="col s12"  method="POST" action="{{ url_for('users.register') }}">
+        <form class="col s12"  method="POST" role="form" action="{{ url_for('users.register') }}">
           {{ form.csrf_token }}
           <div class="row">
             <div class="input-field col s12">

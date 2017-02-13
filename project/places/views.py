@@ -43,7 +43,7 @@ def getPlaces():
 		userID = 1 # placeholder for now
 	else: 
 		userID = session['userID']
-	return db.session.query(Place).filter_by(userID=userID).order_by(Place.placeName.desc())
+	return db.session.query(Place).filter_by(userID=userID)
 
 def getPlace(placeID, userID):
 	'''get single place object for given placeID and userID'''

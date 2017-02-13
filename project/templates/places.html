@@ -5,23 +5,36 @@
       <h2>Hello!</h2>
       <h3>Might I suggest <a href="/login">logging in</a> or <a href="/register"> signing up</a>?</h3>
   	{% else %}
-      <div class="section">
-        {# set first_letter = 'A' #}
-        {% for place in places|sort(attribute='placeName') %}
-        <ul>
-          {% if place.placeName[0].upper() != first_letter %}
-            {% set first_letter = place.placeName[0].upper() %}
-            <li><h5>{{ first_letter }}</h5>  </li>
-            <div class="divider"></div>
-          {% endif %}
+      <div class="row">
+        <h2>Your Restaurant List</h2>
+        <div class="col s12 m9 l10">
+          {% set headers = [] %}
+          {% for place in places|sort(attribute='placeName') %}
           <ul>
-            <a href="{{ url_for('places.details', placeID = place.placeID) }}">{{ place.placeName }}</a>
+            {% if place.placeName[0].upper() != first_letter %}
+              {% set first_letter = place.placeName[0].upper() %}
+              {% do headers.append(first_letter) %}
+              <li id="{{ first_letter }}" class="section scrollspy"><h5>{{ first_letter }}</h5>  </li>
+              <div class="divider"></div>
+            {% endif %}
+            <li>
+              <a href="{{ url_for('places.details', placeID = place.placeID) }}">{{ place.placeName }}</a>
+            </li>
+          {% else %}
+            <p>Either you don't have any resties or something weird is going on.</p>
+          {% endfor %}
           </ul>
-        {% else %}
-          <p>Either you don't have any resties or something weird is going on.</p>
-        {% endfor %}
-        </ul>
-        <div class="divider"></div>
+          <div class="divider"></div>
+        </div>
+        <div class="col hide-on-small-only m1 l1 big">
+          <div class="pinned">
+            <ul class="section table-of-contents">
+              {% for header in headers %}
+                <li><a href="#{{ header }}">{{ header }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
       </div>
     {% endif %}
   </div>

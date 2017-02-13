@@ -120,11 +120,18 @@ def editNotes(placeID):
 #################################### TODO #####################################
 ###############################################################################
 ### clean up home page. make it easier to find restie on your list			###
+###	--did a lot, but could do more											###
+###																			###
 ### allow people to edit notes on places page								###
 ###	--temp workaround is editNotes page. need JS for in page				###
 ### --also having a date auto pop'd when a note is added. 
 ### --maybe like a table
+###																			###
 ### have a search for places and add them to db								###
+###	--will have to have a geolocate in search								###
+###																			###
+###																			###
+###	maps widget in place details											###
 ###																			###
 ###############################################################################
 ###############################################################################

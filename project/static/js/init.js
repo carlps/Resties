@@ -7,3 +7,8 @@
     	selectMonths: true, //creates a dropdown to control month
     	selectYears: 15 // creates a dropdown of 15 years to control year
     });
+
+    $(document).ready(function(){
+    $('.scrollspy').scrollSpy();
+  	});
+      

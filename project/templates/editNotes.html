@@ -8,11 +8,11 @@
   	    <div class="row">
   	    	<div class="input-field col s12">
             {% set f = form.notes.process_data(place.notes) %}
-  	    	  {{  form.notes(class="materialize-textarea", id="textarea_notes") }}
+  	    	  {{  form.notes(class="materialize-textarea", id="textarea_notes", autofocus=true) }}
   	    		<label for="textarea_notes">Notes</label>
   	    	</div>
   	    </div>
-  	    <button class="btn btn-sm btn-success" type="submit">Update Notes</button>
+  	    <button class="waves-effect waves-light btn" type="submit" name="action">Update Notes</button>
   	  </form>
   	</div>
   </div>

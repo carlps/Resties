@@ -1,26 +1,44 @@
 {% extends "_base.html" %}
 {% block content %}
   <div class="container">
-  	<h1>{{ place.name }}</h1>
-  	<h2>{{ place.formatted_address }}</h2>
-  	<p>
-      <h4>Details</h4>
-  	  {{ place.formatted_phone_number }}
-  	  <br />
-  	  {% if place.opening_hours['open_now'] %}
-  		Open now :)
-  	  {% else %}
-  		Closed now :(
-  	  {% endif %}
-  	  <br/>
-  	  {% for day in place.opening_hours['weekday_text'] %}
-  		{{ day }}
-  		<br/>
-  	  {% endfor %}
-  	  <a target="_blank" href="{{ place.website }}">Link to Website</a>
-  	  <br/>
-  	  <a target="_blank" href="{{ place.url }}">Link to Google</a>
-    </p>
+    <div class="row">
+      <div class="col s12">
+        <h1>{{ place.name }}</h1>
+        <h2>{{ place.formatted_address }}</h2>
+      </div>
+    </div>
+  	<div class="row">
+      <div class="col s12 m5 l3">
+        <p>
+          <h4>Details</h4>
+          {{ place.formatted_phone_number }}
+          <br />
+          {% if place.opening_hours['open_now'] %}
+          Open now :)
+          {% else %}
+          Closed now :(
+          {% endif %}
+          <br/>
+          {% for day in place.opening_hours['weekday_text'] %}
+          {{ day }}
+          <br/>
+          {% endfor %}
+          <a target="_blank" href="{{ place.website }}">Link to Website</a>
+          <br/>
+          <a target="_blank" href="{{ place.url }}">Link to Google</a>
+        </p>
+      </div>
+      <div class="col s12 m7 l9">
+        <p>
+          <iframe
+            width="450"
+            height="275"
+            frameborder="0" style="border:0"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBfLYVmoayiVdO9iPQhGNhUXi3jFrC7HlA&q=place_id:{{ place.placeID }}" allowfullscreen>
+          </iframe>
+      </div>
+    </div>
+  	
 
     <p>
       <h4>Notes</h4>

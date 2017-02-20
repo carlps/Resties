@@ -74,7 +74,9 @@ def details(placeID):
 		notes = db.session.query(Place).filter_by(placeID=placeID,userID=session['userID']).first().notes
 	else:
 		notes = None
-	return render_template(
+	return render_template( 
+		#note: template uses unique api key only for displaying maps
+		#when migrating to prod, restrict to only traffic from website 
 		'details.html',
 		place=place,
 		notes=notes,

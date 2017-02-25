@@ -131,9 +131,14 @@ def editNotes(placeID):
 ###																			###
 ### have a search for places and add them to db								###
 ###	--will have to have a geolocate in search								###
-###																			###
+###	--or better, just have a zip for user									###
 ###																			###
 ###	maps widget in place details											###
+###	--done with iframe														###
+###	--maybe look into js?													###
+###	--also NOTE: created new api creds for only map rendering				###
+###	----need to restrict to my website when prod							###
+###																			###
 ###																			###
 ###############################################################################
 ###############################################################################

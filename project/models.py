@@ -31,13 +31,16 @@ class User(db.Model):
 	email = db.Column(db.String, unique=True, nullable=False)
 	password = db.Column(db.String, nullable=False)
 	role = db.Column(db.String, default='user')
+	zipCode = db.Column(db.String, nullable=False)
 	places = db.relationship('Place',backref='saver')
 
-	def __init__(self, userName=None, email=None, password=None, role=None):
+	def __init__(self, userName, email, password, role, zipCode):
 		self.userName = userName
 		self.email = email
 		self.password = password
 		self.role = role
+		self.zipCode = zipCode
+
 
 	def __repr__(self):
 		return '<User {)}>'.format(self.userName)

@@ -56,6 +56,7 @@ def getVisits(placeID):
 		userID = session['userID']
 		return db.session.query(Visit).filter_by(userID=userID,placeID=placeID)
 
+
 ##############
 ### routes ###
 ##############

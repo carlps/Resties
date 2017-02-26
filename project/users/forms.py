@@ -2,12 +2,24 @@
 
 from flask_wtf import Form
 from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired, Length, EqualTo, Email
+from wtforms.validators import DataRequired, Length, EqualTo, Email, ValidationError
+
+def zipCheck(form, field):
+	'''ensure zip code is numeric'''
+	if not field.data.isnumeric():
+		raise ValidationError('Zip code can only be numeric values')
 
 class RegisterForm(Form):
 	name = StringField(
 		'Username',
 		validators=[DataRequired()]
+	)
+	zipCode = StringField(
+		'Zip Code',
+		validators=[DataRequired(), 
+					Length(min=5,max=5,
+						message='Zip Code must be exactly 5 digits'),
+					zipCheck]
 	)
 	email = StringField(
 		'Email',

@@ -10,7 +10,9 @@ from sqlalchemy.exc import IntegrityError
 
 from .forms import RegisterForm, LoginForm
 from project import db, bcrypt
-from project.models import User
+from project.models import User, ZipCode
+import requests
+from os import environ
 
 ##############
 ### config ###
@@ -34,6 +36,49 @@ def login_required(test):
 			flash('You need to login first.')
 			return redirect(url_for('users.login'))
 	return wrap
+
+def geolocateZip(zipCode):
+	'''use google maps API to geocode a zip
+	   AKA takes a zip and returns tuple of zip,lat,long'''
+
+	# create url for looking up zip
+	url = ('https://maps.googleapis.com/maps/api/geocode/'
+		   'json?address={}&key={}'.format(zipCode,environ['GOOGLE_API_RESTIES']))
+	# use requests to request data 
+	request = requests.get(url)
+	# ensure valid response 
+	if request.status_code != 200:
+		raise AttributeError('Request returned bad response')
+	else:
+		# if valid response, return results from json response
+		results = request.json()['results']
+	# if more than one result, raise error (need to test)
+	if len(results) > 1:
+		raise AttributeError('Zip search returned more than one result?')
+
+	# if only one respone, pull lat and long out of json
+	# response has other info, but this is all we need (for now?)
+	lat, lng = results[0]['geometry']['location'].values()
+	# return tuple with zip, latitude, longitude
+	return (zipCode,lat,lng)
+
+def checkZip(zipCode):
+	'''query db for zip code
+	   if already in zipCode table, do nothing
+	   if not, geolocate and insert'''
+
+	# query db for passed zip
+	lookup = ZipCode.query.filter_by(zipCode=zipCode).first()
+	# if nothing returned
+	if lookup is None:
+		# geolocateZip returns (zip, lat, lng)
+		geo = geolocateZip(zipCode)
+		# create new ZipCode object
+		new_zip = ZipCode(*geo)
+		#add new zip code to db
+		db.session.add(new_zip)
+		db.session.commit()
+
 
 ##############
 ### routes ###
@@ -77,10 +122,12 @@ def register():
 	if request.method == 'POST':
 		if form.validate_on_submit():
 			new_user = User(
-				form.name.data,
-				form.email.data,
-				bcrypt.generate_password_hash(form.password.data)
+				userName=form.name.data,
+				email=form.email.data,
+				password=bcrypt.generate_password_hash(form.password.data),
+				zipCode=form.zipCode.data
 			)
+			checkZip(form.zipCode.data)
 			try:
 				db.session.add(new_user)
 				db.session.commit()

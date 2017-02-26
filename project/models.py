@@ -34,7 +34,7 @@ class User(db.Model):
 	zipCode = db.Column(db.String, nullable=False)
 	places = db.relationship('Place',backref='saver')
 
-	def __init__(self, userName, email, password, role, zipCode):
+	def __init__(self, userName=None, email=None, password=None, role='user', zipCode=None):
 		self.userName = userName
 		self.email = email
 		self.password = password
@@ -60,6 +60,20 @@ class Visit(db.Model):
 		self.comments = comments
 		self.userID = userID
 		self.placeID = placeID
+
+class ZipCode(db.Model):
+
+	__tablename__ = 'zipCodes'
+
+	zipCode = db.Column(db.String, primary_key=True)
+	latitude = db.Column(db.Float, nullable=False)
+	longitude = db.Column(db.Float, nullable=False)
+
+	def __init__(self, zipCode, latitude, longitude):
+		self.zipCode = zipCode
+		self.latitude = latitude
+		self.longitude = longitude
+
 
 class GooglePlace(object):
 	"""A place (usually restaurant or bar) as pulled from 

@@ -1,7 +1,7 @@
 # db_create.py
 
 from project import db
-from project.models import Place, User
+from project.models import Place, User, Visit, ZipCode
 
 db.create_all()
 

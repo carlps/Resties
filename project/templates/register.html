@@ -7,12 +7,23 @@
         <form class="col s12"  method="POST" role="form" action="{{ url_for('users.register') }}">
           {{ form.csrf_token }}
           <div class="row">
-            <div class="input-field col s12">
+            <div class="input-field col s12 m6">
               {{ form.name(class="validate", id="name_input")}}
               <label for="name_input">Username</label>
               {% if form.name.errors %}
                 <span class="error">
                   {% for error in form.name.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </span>
+              {% endif %}
+            </div>
+            <div class="input-field col s12 m6">
+              {{ form.zipCode(class="validate", id="zipCode_input")}}
+              <label for="zipCode_input">Zip Code</label>
+              {% if form.zipCode.errors %}
+                <span class="error">
+                  {% for error in form.zipCode.errors %}
                     {{ error }}
                   {% endfor %}
                 </span>

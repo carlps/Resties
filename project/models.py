@@ -167,15 +167,30 @@ class GooglePlace(object):
 	See more details about places and attributes at:
 	https://developers.google.com/places/web-service/details#PlaceDetailsResults
 	"""
-	def __init__(self, placeID):
-		''' I think take placeID as param, then lookup and set all other 
-		attributes with placeID in this __init__
+	def __init__(self, placeID, lookup=None):
+		''' take placeID as param, 
+		and also lookup (which is a json response of Google data)
+		if lookup is None, we don't yet have place details, so: 
+			lookup and set all other 
+			attributes with placeID in this __init__
+		else if lookup False, we already have details so no need to lookup
 		use checkAttr to make sure attribute is in response
+		
+		when lookup is none, thats when we're using google maps api 
+		to find info about a place we have the ID stored for in DB
 
+		when lookup is passed in, that's when we're searching for a new place
+		and the search results return one or more results.
+		these will have less attributes than place lookup.
 		'''
 		self.placeID = placeID
 		#call function to get json object with place data
-		self.lookup = self.lookupPlace(placeID)['result']
+		if not lookup:
+			self.lookup = self.lookupPlace(placeID)['result']
+			print('got lookup info for:',placeID)
+		else:
+			self.lookup = lookup
+			print('already have lookup info for:',placeID)
 
 		#set attributes
 		self.address_components = self.checkAttr(self.lookup,'address_components')

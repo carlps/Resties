@@ -9,8 +9,10 @@ from flask import (flash, redirect, render_template,
 				  request, session, url_for, Blueprint, abort)
 
 from project import db
-from project.models import Place, GooglePlace, Visit
+from project.models import Place, GooglePlace, Visit, ZipCode, User
 from .forms import VisitForm, NotesForm
+from os import environ
+import requests
 
 ##############
 ### config ###
@@ -56,17 +58,74 @@ def getVisits(placeID):
 		userID = session['userID']
 		return db.session.query(Visit).filter_by(userID=userID,placeID=placeID)
 
+def searchForPlace(searchTerm):
+	# get user zip code
+	zipCode = db.session.query(User).filter_by(userID=session['userID']).first().zipCode
+	# get lat and lng info from zip code table
+	lat,lng = db.session.query(ZipCode).filter_by(zipCode=zipCode).with_entities(
+		ZipCode.latitude, ZipCode.longitude).first()
+	# generate search url
+	url = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
+		'location={lat},{lng}&radius={radius}&'
+		'type=food&keyword={keyword}&key={key}').format(
+			lat=lat,
+			lng=lng,
+			radius='20000', # default for now, add customize option later
+			keyword=searchTerm,
+			key=environ['GOOGLE_API_RESTIES']
+		)
+	# use requests to lookup place
+	request = requests.get(url)
+	# ensure valid response 
+	if request.status_code != 200:
+		raise AttributeError('Request returned bad response')
+	
+	# if valid response, return results from json response
+	results = request.json()['results']
+
+	# create empty list to hold places
+	places = []
+	# since search can (and most likely will) return multiple, 
+	# iterate through and create Google Places out of them
+	# and append to places list
+	for result in results:
+		newPlace = GooglePlace(result['place_id'],result) #GooglePlace neeeds id and result
+		places.append(newPlace)
+
+	return places()
+
+
 
 ##############
 ### routes ###
 ##############
 
-@places_blueprint.route('/', methods=['GET','POST'])
+@places_blueprint.route('/')
 def places():
 	return render_template(
 		'places.html',
 		places=getPlaces()
 	)
+
+
+@login_required
+@places_blueprint.route('/search',  methods=['GET','POST'])
+def results():
+
+	
+
+	if request.method == 'POST':
+		if form.validate_on_submit():
+			searchForPlace()
+
+
+
+	
+
+	return render_template(
+		'results.html'
+	)
+
 @places_blueprint.route('/details/<string:placeID>')
 @login_required
 def details(placeID):
@@ -133,6 +192,8 @@ def editNotes(placeID):
 ### have a search for places and add them to db								###
 ###	--will have to have a geolocate in search								###
 ###	--or better, just have a zip for user									###
+###	----have zips now														###
+###																			###
 ###																			###
 ###	maps widget in place details											###
 ###	--done with iframe														###

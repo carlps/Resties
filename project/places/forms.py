@@ -1,7 +1,7 @@
 # project/places/forms.py
 
 from flask_wtf import Form
-from wtforms import TextAreaField
+from wtforms import TextAreaField, StringField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired
 from datetime import date
@@ -16,3 +16,6 @@ class NotesForm(Form):
 	notes = TextAreaField(
 		'Notes'
 	)
+
+class SearchForm(Form):
+	searchTerm = StringField('Search')

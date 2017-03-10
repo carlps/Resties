@@ -10,7 +10,7 @@ from flask import (flash, redirect, render_template,
 
 from project import db
 from project.models import Place, GooglePlace, Visit, ZipCode, User
-from .forms import VisitForm, NotesForm
+from .forms import VisitForm, NotesForm, SearchForm
 from os import environ
 import requests
 
@@ -90,9 +90,12 @@ def searchForPlace(searchTerm):
 	# and append to places list
 	for result in results:
 		newPlace = GooglePlace(result['place_id'],result) #GooglePlace neeeds id and result
-		places.append(newPlace)
+		#filter out anywhere permanently closed
+		#maybe keep and notify instead?
+		if not newPlace.permanently_closed:
+			places.append(newPlace)
 
-	return places()
+	return places
 
 
 
@@ -109,21 +112,24 @@ def places():
 
 
 @login_required
-@places_blueprint.route('/search',  methods=['GET','POST'])
-def results():
+@places_blueprint.route('/search/<string:searchTerm>',  methods=['GET','POST'])
+def search(searchTerm):
 
+	#TODO: finish front end search form
+	#	--attributes
+	#	--make search box bigger or results smaller
+	# add button insert to db
+	# search button
+	#search form on home screen or in header!
+
+
+	#if post, add selected to db
 	
-
-	if request.method == 'POST':
-		if form.validate_on_submit():
-			searchForPlace()
-
-
-
-	
-
 	return render_template(
-		'results.html'
+		'search.html',
+		places = searchForPlace(searchTerm),
+		form = SearchForm(),
+		searchTerm = searchTerm
 	)
 
 @places_blueprint.route('/details/<string:placeID>')
@@ -176,6 +182,9 @@ def editNotes(placeID):
 		flash('Notes updated!')
 		return redirect(url_for('places.details', placeID=placeID)) 
 	return render_template('editNotes.html', place=place, error=error, form=form)
+
+
+
 
 
 ###############################################################################

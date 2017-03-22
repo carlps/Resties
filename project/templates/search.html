@@ -2,16 +2,16 @@
 {% block content %}
 <div class="container">
   <div class="row">
-    <form class="col s12">
-      {{ form.csrf_token }}
-      <div class="row">
-        <div class="input-field col s10">
-          {% set f = form.searchTerm.process_data(searchTerm) %}
-          {{  form.searchTerm(id="searchTerm_input", autofocus=true, class="active") }}
-          <label for="searchTerm_input">Search</label>
-        </div>
-      </div>
-    </form>
+  <!-- Need to make look better. Search button within field.  -->
+  <!-- http://materializecss.com/navbar.html -->
+  <!-- Also, needs to be functional. -->
+    <div class="input-field col s10">
+      <input type="text" name="searchTerm_input" value="{{ searchTerm }}">
+      <label for="searchTerm_input">Search</label>
+    </div>
+    <div class="col s1">
+      <a href="/search/{{ searchTerm }}"><i class="material-icons">search</i></a>
+    </div>
   </div>
   {% for place in places %}
     <div class="row">

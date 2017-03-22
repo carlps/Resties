@@ -203,6 +203,10 @@ def editNotes(placeID):
 ###	--or better, just have a zip for user									###
 ###	----have zips now														###
 ###																			###
+### search bar in header													###
+### --returns places in list (if found)										###
+### --and wider search														###
+### --or maybe have a radio button?											###
 ###																			###
 ###	maps widget in place details											###
 ###	--done with iframe														###

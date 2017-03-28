@@ -97,7 +97,11 @@ def searchForPlace(searchTerm):
 
 	return places
 
-
+def addPlaceToDB(placeID, placeName):
+	''' insert a place into the database'''
+	# just print for now
+	print('{} has ID: {}'.format(placeID, placeName))
+	return None
 
 ##############
 ### routes ###
@@ -110,27 +114,45 @@ def places():
 		places=getPlaces()
 	)
 
+@login_required
+@places_blueprint.route('/search', methods=['GET','POST'])
+def search():
+	form = SearchForm()
+	if request.method == 'POST':
+		searchTerm = form.searchTerm.data
+		return redirect(url_for('places.results', searchTerm=searchTerm))
+	return render_template('search.html',form=form)
+
 
 @login_required
-@places_blueprint.route('/search/<string:searchTerm>',  methods=['GET','POST'])
-def search(searchTerm):
+@places_blueprint.route('/results/<string:searchTerm>',  methods=['GET','POST'])
+def results(searchTerm):
 
 	#TODO: finish front end search form
 	#	--attributes
-	#	--make search box bigger or results smaller
-	# add button insert to db
-	# search button
 	#search form on home screen or in header!
-
 
 	#if post, add selected to db
 	
+	if request.method == 'POST':
+		addPlaceToDB(placeID, placeName)
+		return redirect(url_for('places.details',placeID='ChIJ02oH5Oe3t4kRBgaBDTK91VQ'))
+
+
 	return render_template(
-		'search.html',
+		'results.html',
 		places = searchForPlace(searchTerm),
 		form = SearchForm(),
 		searchTerm = searchTerm
 	)
+
+#how to get two params?
+@places_blueprint.route('/addPlace/<placeID>', methods=['POST'])
+@login_required
+def addPlace(placeID1):
+	addPlaceToDB(placeID)
+	return redirect(url_for('places.places'))
+
 
 @places_blueprint.route('/details/<string:placeID>')
 @login_required

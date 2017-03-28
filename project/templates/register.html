@@ -8,7 +8,7 @@
           {{ form.csrf_token }}
           <div class="row">
             <div class="input-field col s12 m6">
-              {{ form.name(class="validate", id="name_input")}}
+              {{ form.name(class="validate", id="name_input") }}
               <label for="name_input">Username</label>
               {% if form.name.errors %}
                 <span class="error">
@@ -19,7 +19,7 @@
               {% endif %}
             </div>
             <div class="input-field col s12 m6">
-              {{ form.zipCode(class="validate", id="zipCode_input")}}
+              {{ form.zipCode(class="validate", id="zipCode_input") }}
               <label for="zipCode_input">Zip Code</label>
               {% if form.zipCode.errors %}
                 <span class="error">
@@ -32,7 +32,7 @@
           </div>
           <div class="row">
             <div class="input-field col s12">
-              {{ form.email(class="validate", id="email_input")}}
+              {{ form.email(class="validate", id="email_input") }}
               <label for="email_input">Email</label>
               {% if form.email.errors %}
                 <span class="error">
@@ -45,7 +45,7 @@
           </div>
           <div class="row">
             <div class="input-field col s12">
-              {{ form.password(class="validate", id="password_input")}}
+              {{ form.password(class="validate", id="password_input") }}
               <label for="password_input">Password</label>
               {% if form.password.errors %}
                 <span class="error">
@@ -58,7 +58,7 @@
           </div>
           <div class="row">
             <div class="input-field col s12">
-              {{ form.confirm(class="validate", id="confirm_input")}}
+              {{ form.confirm(class="validate", id="confirm_input") }}
               <label for="confirm_input">Confirm Password</label>
               {% if form.confirm.errors %}
                 <span class="error">

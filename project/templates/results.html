@@ -1,0 +1,38 @@
+{% extends "_base.html" %}
+{% block content %}
+<div class="container">
+  {% for place in places %}
+    <form class="col s12" method="POST" action="{{ url_for('places.addPlace', placeID=place.place_id, placeName=place.name) }}">
+      <div class="row">
+        <div class="col s1">
+        	<h4>{{ places.index(place)+1 }}</h4>
+        </div>
+    	  <div class="col s6">
+    	  	<h4>{{ place.name }}</h4>
+    	  </div>
+    	  <div class="col s5 offset-s1">
+    	  	<h5>{{ place.vicinity }}</h5>
+    	  </div>
+    	  <div class="col s3">
+    	  	<button class="waves-effect waves-light btn" type="submit" name="action">Add to list</button>
+  	  </div>
+  	</div>
+  	<div class="row">
+  	  <div class="col s5 offset-s1">
+    	  	need to figure out what attributes they have
+    	  </div>
+  	</div>
+  	<div class="divider"></div>
+  </form>
+  {% else %}
+  <div class="row">
+    <div class="col s12">
+      <h3>Couldn't find anything for <b>"{{ searchTerm }}"</b> in your area :( <br/></h3>
+      <h4>Please <a href="/search">search again</a> or <a href="/">return to home</a>.</h4> 
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+{% endblock %}

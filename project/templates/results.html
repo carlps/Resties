@@ -2,7 +2,11 @@
 {% block content %}
 <div class="container">
   {% for place in places %}
-    <form class="col s12" method="POST" action="{{ url_for('places.addPlace', placeID=place.place_id, placeName=place.name) }}">
+    {% if place.inList %}
+    <form class="col s12" method="GET" action="{{ url_for('places.details', placeID = place.placeID) }}">
+    {% else %}
+    <form class="col s12" method="POST" action="{{ url_for('places.results', searchTerm='test') }}">
+    {% endif %}
       <div class="row">
         <div class="col s1">
         	<h4>{{ places.index(place)+1 }}</h4>
@@ -14,7 +18,11 @@
     	  	<h5>{{ place.vicinity }}</h5>
     	  </div>
     	  <div class="col s3">
-    	  	<button class="waves-effect waves-light btn" type="submit" name="action">Add to list</button>
+          {% if place.inList %}
+    	  	  <button class="waves-effect waves-light btn" type="submit" name="action">Already in list!</button>
+          {% else %}
+            <button class="waves-effect waves-light btn" type="submit" name="action">Add to list</button>
+          {% endif %}
   	  </div>
   	</div>
   	<div class="row">

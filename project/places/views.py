@@ -92,6 +92,13 @@ def searchForPlace(searchTerm):
 		newPlace = GooglePlace(result['place_id'],result) #GooglePlace neeeds id and result
 		#filter out anywhere permanently closed
 		#maybe keep and notify instead?
+
+		#check if place already in user's list
+		#if so, replace key with 
+
+		if db.session.query(Place).filter_by(placeID=result['place_id'],userID=session['userID']).first():
+			newPlace.inList = True
+
 		if not newPlace.permanently_closed:
 			places.append(newPlace)
 
@@ -138,7 +145,6 @@ def results(searchTerm):
 		addPlaceToDB(placeID, placeName)
 		return redirect(url_for('places.details',placeID='ChIJ02oH5Oe3t4kRBgaBDTK91VQ'))
 
-
 	return render_template(
 		'results.html',
 		places = searchForPlace(searchTerm),
@@ -146,12 +152,6 @@ def results(searchTerm):
 		searchTerm = searchTerm
 	)
 
-#how to get two params?
-@places_blueprint.route('/addPlace/<placeID>', methods=['POST'])
-@login_required
-def addPlace(placeID1):
-	addPlaceToDB(placeID)
-	return redirect(url_for('places.places'))
 
 
 @places_blueprint.route('/details/<string:placeID>')

@@ -12,6 +12,8 @@ from project import db
 from project.models import Place, GooglePlace, Visit, ZipCode, User
 from .forms import VisitForm, NotesForm, SearchForm
 from os import environ
+from sqlalchemy.exc import IntegrityError
+
 import requests
 
 ##############
@@ -104,11 +106,20 @@ def searchForPlace(searchTerm):
 
 	return places
 
-def addPlaceToDB(placeID, placeName):
+def addPlaceToDB(placeID):
 	''' insert a place into the database'''
-	# just print for now
-	print('{} has ID: {}'.format(placeID, placeName))
-	return None
+	# kind of inefficient to take only ID and create full Google Place
+	# just to get name. Should update in future to take ID and name
+	googlePlace = GooglePlace(placeID)
+	newPlace = Place(
+		placeID=googlePlace.placeID, 
+		placeName=googlePlace.name, 
+		notes="",
+		userID=session['userID']
+	)
+	db.session.add(newPlace)
+	db.session.commit()
+	return newPlace
 
 ##############
 ### routes ###
@@ -139,12 +150,6 @@ def results(searchTerm):
 	#	--attributes
 	#search form on home screen or in header!
 
-	#if post, add selected to db
-	
-	if request.method == 'POST':
-		addPlaceToDB(placeID, placeName)
-		return redirect(url_for('places.details',placeID='ChIJ02oH5Oe3t4kRBgaBDTK91VQ'))
-
 	return render_template(
 		'results.html',
 		places = searchForPlace(searchTerm),
@@ -152,8 +157,25 @@ def results(searchTerm):
 		searchTerm = searchTerm
 	)
 
-
-
+@places_blueprint.route('/addPlace/<string:placeID>', methods=['POST'])
+@login_required
+def addPlace(placeID):
+	# since GET is not in methods, if GET is attempted, 405 will be returned
+	# a bit inefficient since we have the google place details in the search
+	# and we only send the ID and create a new google place out of it just to
+	# get the name when adding to DB. update in the future.
+	try:
+		newPlace = addPlaceToDB(placeID)
+		flash('{} is added to your list!.'.format(newPlace.placeName))
+		return redirect(url_for('places.details', placeID=newPlace.placeID))
+	except IntegrityError:
+		# hopefully should never get here due to front end logic
+		# which doesn't render an add button for a place already
+		# in the users list
+		error = 'That place is already in this users list.'
+		# user query string should be saved and then used here instead of place.name
+		return render_template('places.results', searchTerm=newPlace.placeName, error=error)
+	
 @places_blueprint.route('/details/<string:placeID>')
 @login_required
 def details(placeID):
@@ -162,6 +184,8 @@ def details(placeID):
 		notes = db.session.query(Place).filter_by(placeID=placeID,userID=session['userID']).first().notes
 	else:
 		notes = None
+
+	#add a button to edit each visit.
 	return render_template( 
 		#note: template uses unique api key only for displaying maps
 		#when migrating to prod, restrict to only traffic from website 

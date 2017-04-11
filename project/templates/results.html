@@ -5,7 +5,7 @@
     {% if place.inList %}
     <form class="col s12" method="GET" action="{{ url_for('places.details', placeID = place.placeID) }}">
     {% else %}
-    <form class="col s12" method="POST" action="{{ url_for('places.results', searchTerm='test') }}">
+    <form class="col s12" method="POST" action="{{ url_for('places.addPlace', placeID=place.placeID) }}">
     {% endif %}
       <div class="row">
         <div class="col s1">

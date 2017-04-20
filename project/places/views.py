@@ -223,7 +223,7 @@ def editVisit(visitID):
 	print(visitID)
 	place = GooglePlace(visit.placeID)
 	error = None
-	form = VisitForm(request.form)
+	form = VisitForm(request.form, visitDate=visit.visitDate)
 	if request.method == 'POST':
 		if form.validate_on_submit():
 			print(visit.visitID)

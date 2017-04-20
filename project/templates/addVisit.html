@@ -9,11 +9,17 @@
       <form class="col s12" method="POST" action="{{ url_for('places.addVisit', placeID=place.placeID) }}">
     {% endif %}
       {{ form.csrf_token }}
+      {% if visit %}
+        <div class="row">
+          <div class="col s12">
+            The date you had for this visit was <b>{{ visit.visitDate }}</b>. You have to re-enter it because I don't know Javascript.<br>
+          </div>    
+        </div>
+      {% endif %}
       <div class="row">
         <div class="input-field col s12">
           <label for="visitDatePicker">Visit Date</label>
-          {% if visit %}
-            {% set vd = form.visitDate.process_data(visit.visitDate) %}
+          {% if visit %}       
             {{ form.visitDate(class='datepicker', id='visitDatePicker') }}
           {% else %}
             {{ form.visitDate(class='datepicker', id='visitDatePicker', placeholder='Pick Date') }}

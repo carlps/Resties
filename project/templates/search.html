@@ -6,7 +6,7 @@
       {{ form.csrf_token }}
       <div class="row">
         <div class="input-field col s12 m10">
-          {{ form.searchTerm(id="search_input") }}
+          {{ form.searchTerm(id="search_input", autofocus=true) }}
           <label for="search_input">Search</label>
         </div>
         <div class="col s12 m2" style="padding-top: 25px"> <!--temp workaround for button -->

@@ -13,6 +13,7 @@ from project.models import Place, GooglePlace, Visit, ZipCode, User
 from .forms import VisitForm, NotesForm, SearchForm
 from os import environ
 from sqlalchemy.exc import IntegrityError
+from datetime import date
 
 import requests
 
@@ -214,6 +215,26 @@ def addVisit(placeID):
 			flash('Visit recorded! I hope you enjoyed!')
 			return redirect(url_for('places.details', placeID=placeID))
 	return render_template('addVisit.html', form=form, error=error, place=place)
+
+@places_blueprint.route('/editVisit/<string:visitID>', methods=['GET','POST'])
+@login_required
+def editVisit(visitID):
+	visit = db.session.query(Visit).filter_by(userID=session['userID'],visitID=visitID).first()
+	print(visitID)
+	place = GooglePlace(visit.placeID)
+	error = None
+	form = VisitForm(request.form)
+	if request.method == 'POST':
+		if form.validate_on_submit():
+			print(visit.visitID)
+			visit.visitDate = form.visitDate.data
+			visit.comments = form.comments.data
+			db.session.commit()
+			flash('Visit updated!')
+			return redirect(url_for('places.details', placeID=visit.placeID))
+	return render_template('addVisit.html', form=form, 
+							error=error, place=place, visit=visit)
+
 
 @places_blueprint.route('/editNotes/<string:placeID>', methods=['GET','POST'])
 @login_required

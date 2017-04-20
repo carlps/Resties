@@ -63,7 +63,7 @@
         {% endif %}
         {% for visit in visits %}
           <br/>
-          On {{ visit.visitDate }} you said: "{{ visit.comments }}"
+          On {{ visit.visitDate }} you said: "{{ visit.comments }}" <a href="{{ url_for('places.editVisit', visitID=visit.visitID) }}">Edit</a>
         {% endfor %}
       {% else %}
         You've never been here!

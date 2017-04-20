@@ -3,12 +3,21 @@
 <div class="container">
   <h3>Tell me about your visit to {{ place.name }}</h3>
   <div class="row">
-    <form class="col s12" method="POST" action="{{ url_for('places.addVisit', placeID=place.placeID) }}">
+    {% if visit %}
+      <form class="col s12" method="POST" action="{{ url_for('places.editVisit', visitID=visit.visitID) }}">
+    {% else %}
+      <form class="col s12" method="POST" action="{{ url_for('places.addVisit', placeID=place.placeID) }}">
+    {% endif %}
       {{ form.csrf_token }}
       <div class="row">
         <div class="input-field col s12">
           <label for="visitDatePicker">Visit Date</label>
-          {{ form.visitDate(class='datepicker', id='visitDatePicker', placeholder='Pick Date') }}
+          {% if visit %}
+            {% set vd = form.visitDate.process_data(visit.visitDate) %}
+            {{ form.visitDate(class='datepicker', id='visitDatePicker') }}
+          {% else %}
+            {{ form.visitDate(class='datepicker', id='visitDatePicker', placeholder='Pick Date') }}
+          {% endif %}
           {% if form.visitDate.errors %}
             <span class="error">
               {% for error in form.visitDate.errors %}
@@ -21,6 +30,9 @@
       </div>
       <div class="row">
         <div class="input-field col s12">
+          {% if visit %}
+            {% set c = form.comments.process_data(visit.comments) %}
+          {% endif %}
           {{ form.comments(id="comments", class="materialize-textarea") }}
           <label for="comments">Comments</label>
           {% if form.comments.errors %}

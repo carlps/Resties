@@ -101,7 +101,7 @@ def login():
 	form = LoginForm(request.form)
 	if request.method == 'POST':
 		if form.validate_on_submit():
-			user = User.query.filter_by(userName=request.form['name']).first()
+			user = User.query.filter_by(userName=request.form['userName']).first()
 			if user is not None and bcrypt.check_password_hash(
 					user.password, request.form['password']):
 				session['logged_in'] = True
@@ -122,7 +122,7 @@ def register():
 	if request.method == 'POST':
 		if form.validate_on_submit():
 			new_user = User(
-				userName=form.name.data,
+				userName=form.userName.data,
 				email=form.email.data,
 				password=bcrypt.generate_password_hash(form.password.data),
 				zipCode=form.zipCode.data

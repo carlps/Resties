@@ -8,11 +8,11 @@
           {{ form.csrf_token }}
           <div class="row">
             <div class="input-field col s12 m6">
-              {{ form.name(class="validate", id="name_input") }}
-              <label for="name_input">Username</label>
-              {% if form.name.errors %}
+              {{ form.userName(class="validate", id="userName_input") }}
+              <label for="userName_input">Username</label>
+              {% if form.userName.errors %}
                 <span class="error">
-                  {% for error in form.name.errors %}
+                  {% for error in form.userName.errors %}
                     {{ error }}
                   {% endfor %}
                 </span>

@@ -9,9 +9,9 @@
       {{ form.csrf_token }}
       <div class="row">
         <div class="input-field col s12">
-          {{ form.name(id="name_input", autofocus=true) }}
-          <label for="name_input">Username</label>
-          {% if form.name.errors %}
+          {{ form.userName(id="userName_input", autofocus=true) }}
+          <label for="userName_input">Username</label>
+          {% if form.userName.errors %}
             <span class="error">
               {% for error in form.name.errors %}
                 {{ error }}

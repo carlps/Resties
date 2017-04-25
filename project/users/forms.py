@@ -10,7 +10,7 @@ def zipCheck(form, field):
 		raise ValidationError('Zip code can only be numeric values')
 
 class RegisterForm(Form):
-	name = StringField(
+	userName = StringField(
 		'Username',
 		validators=[DataRequired()]
 	)
@@ -35,7 +35,7 @@ class RegisterForm(Form):
 	)
 
 class LoginForm(Form):
-	name = StringField(
+	userName = StringField(
 		'Username',
 		validators=[DataRequired()]
 	)

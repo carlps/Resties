@@ -61,9 +61,13 @@ def getVisits(placeID):
 		userID = session['userID']
 		return db.session.query(Visit).filter_by(userID=userID,placeID=placeID)
 
+
+def getUserZip():
+	return db.session.query(User).filter_by(userID=session['userID']).first().zipCode
+
 def searchForPlace(searchTerm):
 	# get user zip code
-	zipCode = db.session.query(User).filter_by(userID=session['userID']).first().zipCode
+	zipCode = getUserZip()
 	# get lat and lng info from zip code table
 	lat,lng = db.session.query(ZipCode).filter_by(zipCode=zipCode).with_entities(
 		ZipCode.latitude, ZipCode.longitude).first()
@@ -95,7 +99,6 @@ def searchForPlace(searchTerm):
 		newPlace = GooglePlace(result['place_id'],result) #GooglePlace neeeds id and result
 		#filter out anywhere permanently closed
 		#maybe keep and notify instead?
-
 		#check if place already in user's list
 		#if so, replace key with 
 
@@ -122,6 +125,7 @@ def addPlaceToDB(placeID):
 	db.session.commit()
 	return newPlace
 
+
 ##############
 ### routes ###
 ##############
@@ -147,15 +151,17 @@ def search():
 @places_blueprint.route('/results/<string:searchTerm>',  methods=['GET','POST'])
 def results(searchTerm):
 
-	#TODO: finish front end search form
-	#	--attributes
-	#search form on home screen or in header!
+	# need to sanitize input
+	searchTermLookup = searchTerm.replace(' ','+')
 
 	return render_template(
 		'results.html',
 		places = searchForPlace(searchTerm),
 		form = SearchForm(),
-		searchTerm = searchTerm
+		searchTerm = searchTerm,
+		searchTermLookup = searchTermLookup,
+		key=environ['GOOGLE_API_RESTIES'],
+		zipCode=getUserZip()
 	)
 
 @places_blueprint.route('/addPlace/<string:placeID>', methods=['POST'])
@@ -193,7 +199,8 @@ def details(placeID):
 		'details.html',
 		place=place,
 		notes=notes,
-		visits=getVisits(placeID)
+		visits=getVisits(placeID),
+		key=environ['GOOGLE_API_RESTIES']
 	)
 
 @places_blueprint.route('/addVisit/<string:placeID>', methods=['GET','POST'])

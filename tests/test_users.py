@@ -45,10 +45,12 @@ class UsersTests(unittest.TestCase):
             data=dict(userName=userName, password=password), 
             follow_redirects=True)
 
-    def register(self, userName, email, password, zipCode):
+    def register(self, userName, email, password, confirm, zipCode):
         return self.app.post(
-            '/register',
-            data=dict(userName=userName, email=email,password=password,zipCode=zipCode),
+            '/register/',
+            data=dict(userName=userName, email=email,
+                        password=password, confirm=confirm,
+                        zipCode=zipCode),
             follow_redirects=True
             )
     def logout(self):
@@ -69,13 +71,9 @@ class UsersTests(unittest.TestCase):
     #############
     
     def test_users_can_register(self):
-        ''' THIS DOESNT TEST USERS CAN REFGISTER IT TESTS USERS CAN BE CREATED
-        self.createUser('isaac', 'iceman@gmail.com', 'iceyboi',87004)
-        test = db.session.query(User).all()
-        for t in test:
-            t.userName
-        assert t.userName == 'isaac'
-        '''
+        response = self.register('isaac', 'iceman@gmail.com', 'iceyboi', 'iceyboi','87004')
+        self.assertIn(b'Thanks for registering. Please login.', response.data)
+
     def test_login_link_is_present_on_home_page(self):
         response = self.app.get('/')
         self.assertEqual(response.status_code, 200)
@@ -86,8 +84,58 @@ class UsersTests(unittest.TestCase):
         self.assertIn(b'Invalid username or password',response.data)
 
     def test_users_can_login(self):
-        '''FAILS. GET THE REGISTER WORKING FIRST
-        self.register('isaac','iceman@yoohoo.com','iceyicey',87004)
-        response = self.login('isaac','iceyicey')
+        self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87004')
+        response = self.login('isaac','iceyboi')
         self.assertIn(b'Welcome isaac!', response.data)
-        '''
+
+    def test_login_invalid_form_data(self):
+        self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87004')
+        response = self.login("' OR 1=1; --",'password123')
+        self.assertIn(b'Invalid username or password', response.data)
+
+    def test_form_is_present_on_register_page(self):
+        response = self.app.get('register/')
+        self.assertEqual(response.status_code,200)
+        self.assertIn(b'Please register to begin listing restaurants.',response.data)
+
+    def test_user_registration_error_duplicate(self):
+        self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87004')
+        response = self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87004')
+        self.assertIn(b'That username and/or email already exist.',response.data)
+
+    def test_user_registration_error_pword(self):
+        response = self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi2','87004')
+        self.assertIn(b"Passwords didn&#39;t match", response.data)
+
+    def test_user_registration_invalid_zip_alpha(self):
+        response = self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87OO4')
+        self.assertIn(b'Zip code can only be numeric values', response.data)
+
+    def test_user_registration_invalid_zip_length(self):
+        response = self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','123456789')
+        self.assertIn(b'Zip Code must be exactly 5 digits', response.data)
+
+    def test_logged_in_users_can_logout(self):
+        # THIS ONE IS FAILING AND IDK WHY
+        self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87004')
+        # LOGIN ISN'T LOGGING IN
+        self.login('issac','iceyboi')
+        response = self.logout()
+        self.assertIn(b'Goodbye!', response.data)
+
+    def test_not_logged_in_users_cannot_logout(self):
+        response = self.logout()
+        self.assertNotIn(b'Goodbye!',response.data)
+
+    def test_default_user_role(self):
+        self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87004')
+
+        users = db.session.query(User).all()
+        for user in users:
+            self.assertEqual(user.role,'user')
+
+    #geolocate zip
+    #check zip
+
+if __name__ == '__main__':
+    unittest.main()

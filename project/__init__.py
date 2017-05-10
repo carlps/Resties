@@ -26,6 +26,16 @@ def not_found(error):
 			f.write("\n404 error at {}: {} ".format(current_timestamp, r))
 	return render_template('404.html'), 404
 
+@app.errorhandler(405)
+def not_found(error):
+	if app.debug is not True:
+		now = datetime.datetime.now()
+		r = request.url
+		with open('error.log', 'a') as f:
+			current_timestamp = now.strftime("%d-%m-%Y %H:%M:%S")
+			f.write("\n405 error at {}: {} ".format(current_timestamp, r))
+	return render_template('405.html'), 405
+
 @app.errorhandler(500)
 def internal_error(error):
 	if app.debug is not True:

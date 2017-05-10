@@ -58,7 +58,8 @@ def geolocateZip(zipCode):
 
 	# if only one respone, pull lat and long out of json
 	# response has other info, but this is all we need (for now?)
-	lat, lng = results[0]['geometry']['location'].values()
+	lat = results[0]['geometry']['location']['lat']
+	lng = results[0]['geometry']['location']['lng']
 	# return tuple with zip, latitude, longitude
 	return (zipCode,lat,lng)
 

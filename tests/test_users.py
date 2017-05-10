@@ -1,4 +1,4 @@
-# project/test_users.py
+# tests/test_users.py
 
 
 import os
@@ -6,7 +6,7 @@ import unittest
 
 from project import app, db, bcrypt
 from project._config import basedir
-from project.models import User
+from project.models import User, ZipCode
 
 TEST_DB = 'test.db'
 
@@ -116,10 +116,8 @@ class UsersTests(unittest.TestCase):
         self.assertIn(b'Zip Code must be exactly 5 digits', response.data)
 
     def test_logged_in_users_can_logout(self):
-        # THIS ONE IS FAILING AND IDK WHY
         self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87004')
-        # LOGIN ISN'T LOGGING IN
-        self.login('issac','iceyboi')
+        self.login('isaac','iceyboi')
         response = self.logout()
         self.assertIn(b'Goodbye!', response.data)
 
@@ -134,8 +132,26 @@ class UsersTests(unittest.TestCase):
         for user in users:
             self.assertEqual(user.role,'user')
 
-    #geolocate zip
-    #check zip
+    def test_new_zip(self):
+        self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87004')
+        zip = ZipCode.query.filter_by(zipCode='87004').first()
+        self.assertEqual(zip.zipCode, '87004')
+
+    def test_new_zip_latitude(self):
+        self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87004')
+        zip = ZipCode.query.filter_by(zipCode='87004').first()
+        self.assertEqual(zip.latitude,35.3180691)
+    
+    def test_new_zip_longitude(self):
+        self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87004')
+        zip = ZipCode.query.filter_by(zipCode='87004').first()
+        self.assertEqual(zip.longitude,-106.5466221)
+
+    def test_duplicate_zip(self):
+        self.register('isaac','iceman@yoohoo.com', 'iceyboi', 'iceyboi','87004')
+        self.register('mario','moxpod@yeehee.cem', 'moxyboi', 'moxyboi','87004')
+        zip = ZipCode.query.all()
+        self.assertEqual(1,len(zip))
 
 if __name__ == '__main__':
     unittest.main()

@@ -173,7 +173,7 @@ def addPlace(placeID):
 	# get the name when adding to DB. update in the future.
 	try:
 		newPlace = addPlaceToDB(placeID)
-		flash('{} is added to your list!.'.format(newPlace.placeName))
+		flash('{} is added to your list!'.format(newPlace.placeName))
 		return redirect(url_for('places.details', placeID=newPlace.placeID))
 	except IntegrityError:
 		# hopefully should never get here due to front end logic

@@ -3,10 +3,11 @@
 
 import os
 import unittest
+from datetime import date
 
 from project import app, db, bcrypt
 from project._config import basedir
-from project.models import Place
+from project.models import Place, User
 
 TEST_DB = 'test.db'
 
@@ -91,6 +92,66 @@ class PlacesTests(unittest.TestCase):
     	response = self.app.get('/addPlace/abc123', follow_redirects=True)
     	self.assertEqual(response.status_code,405)
     	self.assertIn(b"Method not allowed. Were you trying to do something you\'re not supposed to???", response.data)
+
+    def test_users_can_access_place_details(self):
+    	self.register()
+    	self.login()
+    	self.app.post('/addPlace/ChIJ-6zk5ZO3t4kRwi3BXpaCRjE', follow_redirects=True)
+    	response = self.app.get('/details/ChIJ-6zk5ZO3t4kRwi3BXpaCRjE', follow_redirects=True)
+    	self.assertIn(b'Momofuku CCDC', response.data)
+
+    '''#can't do it because date...
+    def test_users_can_add_visits(self):
+    	self.register()
+    	self.login()
+    	self.app.post('/addPlace/ChIJ-6zk5ZO3t4kRwi3BXpaCRjE', follow_redirects=True)
+    	response= self.app.post('/addVisit/ChIJ-6zk5ZO3t4kRwi3BXpaCRjE', 
+    		data=dict(visitDate='01-01-2017', 
+    				  comments='visited new years.',
+    				  userID=1,
+    				  placeID='ChIJ-6zk5ZO3t4kRwi3BXpaCRjE'
+    				 ),
+    		follow_redirects=True)
+    	self.assertIn(b'Visit recorded! I hope you enjoyed!', response.data)
+	'''
+    #users_can_edit_visits
+
+    def test_users_can_edit_notes(self):
+    	self.register()
+    	self.login()
+    	self.app.post('/addPlace/ChIJ-6zk5ZO3t4kRwi3BXpaCRjE', follow_redirects=True)
+    	response = self.app.post('/editNotes/ChIJ-6zk5ZO3t4kRwi3BXpaCRjE',
+    							data = dict(notes='Cool spot.'),
+    							follow_redirects=True
+    			)
+    	self.assertIn(b'Cool spot.', response.data)
+
+    def test_users_can_search_for_places(self):
+    	self.register()
+    	self.login()
+    	response = self.app.post('/search',
+    					data=dict(searchTerm='the range'), 
+    					follow_redirects=True)
+    	self.assertIn(b'/addPlace/ChIJ95RxxRN4IocRUhvj7gXGxEo',response.data)
+
+    def test_no_add_place_link_if_already_in_list(self):
+    	self.register()
+    	self.login()
+    	self.app.post('/addPlace/ChIJ95RxxRN4IocRUhvj7gXGxEo', follow_redirects=True)
+    	response = self.app.post('/search',
+    					data=dict(searchTerm='the range'), 
+    					follow_redirects=True)
+    	self.assertNotIn(b'/addPlace/ChIJ95RxxRN4IocRUhvj7gXGxEo',response.data)
+
+    def test_added_place_in_list_on_home_page(self):
+    	self.register()
+    	self.login()
+    	self.app.post('/addPlace/ChIJ95RxxRN4IocRUhvj7gXGxEo', follow_redirects=True)
+    	response = self.app.get('/', follow_redirects=True)
+    	self.assertIn(b'The Range Cafe', response.data)
+
+    # maybe test GooglePlace attributes?
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -6,3 +6,5 @@ __pycache__
 .coverage
 htmlcov
 _config.py
+project/test.db
+error.log

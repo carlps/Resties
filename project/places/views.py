@@ -65,23 +65,47 @@ def getVisits(placeID):
 def getUserZip():
 	return db.session.query(User).filter_by(userID=session['userID']).first().zipCode
 
-def searchForPlace(searchTerm):
-	# get user zip code
-	zipCode = getUserZip()
-	# get lat and lng info from zip code table
-	lat,lng = db.session.query(ZipCode).filter_by(zipCode=zipCode).with_entities(
+def getLatLngFromZip(zipCode):
+	lkp = db.session.query(ZipCode).filter_by(zipCode=zipCode).with_entities(
 		ZipCode.latitude, ZipCode.longitude).first()
+	if lkp:
+		return lkp
+	else:
+		#################################
+		## TODO insert new zip into DB ##
+		#################################
+		return
+
+def searchForPlace(searchTerm, **kwargs):
+
+	if 'zipCode' in kwargs:
+		zipCode = kwargs['zipCode']
+		print(f'set zipcode to {zipCode}')
+	else:
+		print("didn't supply zip, so getting from user profile")
+		zipCode = getUserZip()
+	if 'radius' in kwargs:
+		radius = kwargs['radius']
+	else:
+		# default to 20000
+		radius = 20000
+
+
+
+	# get lat and lng info from zip code table
+	lat,lng = getLatLngFromZip(zipCode)
 	# generate search url
 	url = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
 		'location={lat},{lng}&radius={radius}&'
 		'type=food&keyword={keyword}&key={key}').format(
 			lat=lat,
 			lng=lng,
-			radius='20000', # default for now, add customize option later
+			radius=radius,
 			keyword=searchTerm,
 			key=environ['GOOGLE_API_RESTIES']
 		)
 	# use requests to lookup place
+	print(url)
 	request = requests.get(url)
 	# ensure valid response 
 	if request.status_code != 200:
@@ -125,6 +149,8 @@ def addPlaceToDB(placeID):
 	db.session.commit()
 	return newPlace
 
+def milesToMeters(miles):
+	return int(int(miles)*1609.34)
 
 ##############
 ### routes ###
@@ -140,29 +166,27 @@ def places():
 @login_required
 @places_blueprint.route('/search', methods=['GET','POST'])
 def search():
-	form = SearchForm()
+	zipCode = getUserZip()
+	radius = 12
+	form = SearchForm(zipCode,radius)
 	if request.method == 'POST':
-		searchTerm = form.searchTerm.data
-		return redirect(url_for('places.results', searchTerm=searchTerm))
+		searchTerm = request.form['searchTerm'].replace(' ','+')
+		zipCode = request.form['zipCode']
+		radius = milesToMeters(request.form['radius'])
+		return render_template(
+			'results.html',
+			places = searchForPlace(searchTerm=searchTerm,
+									zipCode=zipCode,
+									radius=radius),
+			searchTerm = searchTerm,
+			searchTermLookup = searchTerm,
+			key=environ['GOOGLE_API_RESTIES'],
+			zipCode=zipCode
+			)
+
 	return render_template('search.html',form=form)
 
 
-@login_required
-@places_blueprint.route('/results/<string:searchTerm>',  methods=['GET','POST'])
-def results(searchTerm):
-
-	# need to sanitize input
-	searchTermLookup = searchTerm.replace(' ','+')
-
-	return render_template(
-		'results.html',
-		places = searchForPlace(searchTerm),
-		form = SearchForm(),
-		searchTerm = searchTerm,
-		searchTermLookup = searchTermLookup,
-		key=environ['GOOGLE_API_RESTIES'],
-		zipCode=getUserZip()
-	)
 
 @places_blueprint.route('/addPlace/<string:placeID>', methods=['POST'])
 @login_required

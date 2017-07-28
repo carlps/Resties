@@ -9,6 +9,14 @@
           {{ form.searchTerm(id="search_input", autofocus=true) }}
           <label for="search_input">Search</label>
         </div>
+        <div class="input-field col s12 m6">
+          {{ form.zipCode(id="zip_code") }}
+          <label for="zip_code">Zip Code</label>
+        </div>
+        <div class="input-field col s12 m6">
+          {{ form.radius(id="radius") }}
+          <label for="radius">Radius (Miles)</label>
+        </div>
         <div class="col s12 m2" style="padding-top: 25px"> <!--temp workaround for button -->
           <button class="waves-effect waves-light btn" type="submit" name="action"">Search</button>
         </div>

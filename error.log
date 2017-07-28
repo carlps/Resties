@@ -49,3 +49,9 @@
 405 error at 11-05-2017 21:22:54: http://localhost/addPlace/abc123 
 404 error at 11-05-2017 21:25:36: http://localhost/this-route-does-not-exist/ 
 405 error at 11-05-2017 21:25:52: http://localhost/addPlace/abc123 
+404 error at 27-07-2017 22:15:02: http://localhost/this-route-does-not-exist/ 
+405 error at 27-07-2017 22:15:19: http://localhost/addPlace/abc123 
+404 error at 27-07-2017 22:18:03: http://localhost/this-route-does-not-exist/ 
+405 error at 27-07-2017 22:18:20: http://localhost/addPlace/abc123 
+404 error at 27-07-2017 22:18:31: http://localhost/this-route-does-not-exist/ 
+405 error at 27-07-2017 22:18:44: http://localhost/addPlace/abc123 

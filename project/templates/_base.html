@@ -1,54 +1,75 @@
-<!doctype html>
 <!DOCTYPE html>
-<html>
+<html lang='en'>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="description" content="Create resataurant lists and record your thoughts">
     <title>Resties</title>
     <!-- Import Google Icon Font -->
-  	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  	<!--Import materialize.css-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}"  media="screen,projection"/>
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   </head>
   <body>
-  	<div>
-	<nav>
-	<div class="nav-wrapper">
-		<a href="/" class="brand-logo center">Resties</a>
-		<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-		<ul class="left hide-on-med-and-down">
-		  {% if not session.logged_in %}
-			<li><a href="/login">log in</a> </li>
-			<li><a href="/register">register</a></li>
-		  {% else %}
-		 	<li><a href="/logout">log out</a></li>
-		 	<li><a href="/search">search</a></li>
-		  {% endif %}
-		</ul>
-		<ul class="side-nav" id="mobile-demo">
-		  {% if not session.logged_in %}
-			<li><a href="/login">log in</a> </li>
-			<li><a href="/register">register</a></li>
-		  {% else %}
-		 	<li><a href="/search">search</a></li>
-		 	<li><a href="/logout">log out</a></li>	
-		  {% endif %}
-		</ul>
-	</div>
-	</nav>
-	{% for message in get_flashed_messages() %}
-	 <div class=flash>{{ message }}</div>
-	 {% endfor %}
-
-	 {% if error %}
-	   <div class="error"><strong>Error:</strong> {{ error }}</div>
-	 {% endif %}
-
-	 {% block content %}
-	 {% endblock %}
-	</div>
-	<!--Import jQuery before materialize.js-->
+    <header>
+      <nav class="teal lighten-2" role="navigation">
+        <div class="nav_wrapper container">
+          <a href="/" class="brand-logo center">Resties</a>
+          <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+          <ul class="left hide-on-med-and-down">
+            {% if not session.logged_in %}
+            <li><a href="/login">log in</a> </li>
+            <li><a href="/register">register</a></li>
+            {% else %}
+            <li><a href="/logout">log out</a></li>
+            <li><a href="/search">search</a></li>
+            {% endif %}
+          </ul>
+          <ul class="side-nav" id="mobile-demo">
+            {% if not session.logged_in %}
+            <li><a href="/login">log in</a> </li>
+            <li><a href="/register">register</a></li>
+            {% else %}
+            <li><a href="/search">search</a></li>
+            <li><a href="/logout">log out</a></li>  
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <div class="container">
+        {% for message in get_flashed_messages() %}
+          <div class=flash>{{ message }}</div>
+        {% endfor %}
+        {% if error %}
+          <div class="error"><strong>Error:</strong> {{ error }}</div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </div>
+    </main>
+    <footer class="page-footer teal lighten-3">
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="black-text">Resties</h5>
+            <p class="black-text"> Resties is an open source web application created and maintained by <a class="indigo-text text-darken-4" href="https://github.com/carlps">Carlos Torres</a>. You can find the source <a class="indigo-text text-darken-4"  href="https://github.com/carlps/Resties">here</a>. Resties is built on <a class="indigo-text text-darken-4" href="http://flask.pocoo.org/">Flask</a>. The beautiful front end is built using the <a class="indigo-text text-darken-4" href="http://materializecss.com/">Materialize CSS Framework</a>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+          © 2017 Carlos Torres
+        </div>
+      </div>
+    </footer>
+    <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/init.js') }}"></script>

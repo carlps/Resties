@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
   <h1>Welcome to Resties.</h1>
-  <h3>Please sign in to access your restuarants list</h3>
+  <h3>Please sign in to access your restaurants list</h3>
   <div class="row">
     <form class="col s12" method="POST" action="{{ url_for('users.login') }}" role="form">
       {{ form.csrf_token }}
@@ -37,7 +37,7 @@
     </form>    
   </div>
   <div class="row">
-    <div class="col">
+    <div class="col s12">
       <em>Need an account? </em><a href="/register">Signup!!</a>
     </div>
   </div>

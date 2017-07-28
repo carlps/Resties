@@ -78,7 +78,7 @@ class PlacesTests(unittest.TestCase):
 
     def test_not_logged_in_users_cannot_access_places_list(self):
     	response = self.app.get('/', follow_redirects=True)
-    	self.assertIn(b'Might I suggest <a href="/login">logging in</a> or <a href="/register"> signing up',response.data)
+    	self.assertNotIn(b"Either you don\'t have any resties or something weird is going on.",response.data)
 
     def test_users_can_add_places(self):
     	self.register()

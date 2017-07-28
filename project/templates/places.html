@@ -2,8 +2,28 @@
 {% block content %}
   <div class="container">
     {% if not session.logged_in %}
-      <h2>Hello!</h2>
-      <h3>Might I suggest <a href="/login">logging in</a> or <a href="/register"> signing up</a>?</h3>
+      <div class="row">
+        <div class="col s12">
+          <h2>Welcome to Resties!</h2>
+          <p>
+            Resties is a web app for making lists of restaurants you're interested in.
+            You can keep track of hot new joints, old standbys, and warn yourself not to go back to that janky discount sushi spot.
+          </p>
+          <h3>How does it work?</h3>
+          <p>
+            After you <a href="{{ url_for('users.register' )}}">sign up</a> or <a href="{{ url_for('users.login') }}">sign in</a>, you can search for any restaurant in your vicinity. <br><br>
+            We get our data from Google Maps, so it's always up to date.<br><br>
+            When you find the place you're interested in, just add it to your list, leave a note if you want, and you've started! On the page for the restaurant, you'll see useful information like hours, phone number, website link, and even a map!<br><br>
+            Whenever you eat at a restaurant, just come back to the page, add in your visit, and that's that! This way you can keep track of where you ate, when you went, and what your visit was like. Instead trusting randos on review sites, just come back here and see what you liked or hated from your last visit. 
+          </p>
+          <h3>Ready to get started?</h3>
+          <p>
+            <a href="{{ url_for('users.register' )}}">Sign up</a> or <a href="{{ url_for('users.login') }}">sign in</a>!
+          </p>
+          <h3>Want to learn more?</h3>
+          <p>Click <a href="https://github.com/carlps/Resties"">here</a> to learn more!</p>
+        </div>
+      </div>
   	{% else %}
       <div class="row">
         <h2>Your Restaurant List</h2>

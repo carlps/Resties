@@ -6,4 +6,4 @@ Users can create lists of restaurants and record visits. All place data is pulle
 Front end is reactive, utilizing [Materialize CSS](https://github.com/dogfalo/materialize/)
 
 Screenshot:
-![screenshot of the app on Donburi](scrot.png "Screenshot of the app in fullscreen")
+![screenshot of the app on Donburi](/screenhots/fullscreen.png "Screenshot of the app in fullscreen")

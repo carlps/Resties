@@ -74,7 +74,7 @@ class PlacesTests(unittest.TestCase):
     def test_logged_in_users_access_places_list(self):
     	self.register()
     	response = self.login()
-    	self.assertIn(b"Either you don\'t have any resties or something weird is going on.",response.data)
+    	self.assertIn(b"Your list is empty!",response.data)
 
     def test_not_logged_in_users_cannot_access_places_list(self):
     	response = self.app.get('/', follow_redirects=True)

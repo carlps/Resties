@@ -10,7 +10,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 DATABASE= 'resties.db'
 CSRF_ENABLED = True
 SECRET_KEY = hexlify(os.urandom(24))
-DEBUG = True
+DEBUG = False
 
 # define full path for database 
 DATABASE_PATH = os.path.join(basedir,DATABASE)

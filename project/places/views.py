@@ -5,17 +5,18 @@
 ###############
 
 from functools import wraps
+from os import environ
+from datetime import date
+import requests
+
 from flask import (flash, redirect, render_template, 
 				  request, session, url_for, Blueprint, abort)
+from sqlalchemy.exc import IntegrityError
 
 from project import db
 from project.models import Place, GooglePlace, Visit, ZipCode, User
 from .forms import VisitForm, NotesForm, SearchForm
-from os import environ
-from sqlalchemy.exc import IntegrityError
-from datetime import date
-
-import requests
+from project.utils.zipUtils import zipCheck
 
 ##############
 ### config ###
@@ -66,15 +67,10 @@ def getUserZip():
 	return db.session.query(User).filter_by(userID=session['userID']).first().zipCode
 
 def getLatLngFromZip(zipCode):
-	lkp = db.session.query(ZipCode).filter_by(zipCode=zipCode).with_entities(
+	zipCheck(zipCode)
+	return db.session.query(ZipCode).filter_by(zipCode=zipCode).with_entities(
 		ZipCode.latitude, ZipCode.longitude).first()
-	if lkp:
-		return lkp
-	else:
-		#################################
-		## TODO insert new zip into DB ##
-		#################################
-		return
+	
 
 def searchForPlace(searchTerm, **kwargs):
 

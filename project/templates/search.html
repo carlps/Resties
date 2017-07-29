@@ -9,21 +9,46 @@
           {{ form.searchTerm(id="search_input", autofocus=true) }}
           <label for="search_input">Search</label>
         </div>
-        <div class="input-field col s12 m6">
+      </div>
+      <div class="row">
+        <div class="col s6">
+          <button class="waves-effect waves-light btn" type="submit" name="action"">Search</button>    
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s6">
+          <a href="#!" id="options_btn" class="waves-effect waves-light btn" onclick="showHideOptions()">More options</a>
+        </div>
+      </div> 
+      <ul id="more_options" class="invisible">
+        <li class="input-field col s12 m6">
           {{ form.zipCode(id="zip_code") }}
           <label for="zip_code">Zip Code</label>
-        </div>
-        <div class="input-field col s12 m6">
+        </li>
+        <li class="input-field col s12 m6">
           {{ form.radius(id="radius") }}
           <label for="radius">Radius (Miles)</label>
-        </div>
-        <div class="col s12 m2" style="padding-top: 25px"> <!--temp workaround for button -->
-          <button class="waves-effect waves-light btn" type="submit" name="action"">Search</button>
+        </li>
+        <ul class="col s12 m2" style="padding-top: 25px"> <!--temp workaround for button -->
+          
         </div>
       </div>
     </form>
   </div>
 </div>
+
+<script>
+function showHideOptions() {
+    if($("#more_options").css('opacity')==0) {
+      document.getElementById("more_options").style.opacity = "1";
+      $("#options_btn").text('Hide Options');
+    }
+    else {
+      document.getElementById("more_options").style.opacity = "0";
+      $("#options_btn").text('More Options');
+    }
+}
+</script>
 
 
 {% endblock %}

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/carlps/Resties.svg?branch=master)](https://travis-ci.org/carlps/Resties)
+
 # Resties
 Flask web app for users to create restaurant lists, using Google Places API.
 

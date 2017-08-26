@@ -1,7 +1,8 @@
 advanced search
 x-zip and radius
-    --can you use js to hide and show advanced?
-    !-handle new zip
+    x-can you use js to hide and show advanced?
+    x-handle new zip
+--breaks on empty search
 
 toast
 

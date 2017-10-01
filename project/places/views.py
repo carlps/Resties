@@ -9,7 +9,7 @@ from os import environ
 from datetime import date
 import requests
 
-from flask import (flash, redirect, render_template, 
+from flask import (flash, redirect, render_template,
 				  request, session, url_for, Blueprint, abort)
 from sqlalchemy.exc import IntegrityError
 
@@ -28,6 +28,7 @@ places_blueprint = Blueprint('places', __name__)
 ### helper functions ###
 ########################
 
+
 def login_required(test):
 	'''wrapper function to test a method
 	test is whether or not the user is logged in
@@ -41,36 +42,43 @@ def login_required(test):
 			return redirect(url_for('users.login'))
 	return wrap
 
-def getPlaces():
+
+def getUserPlaces():
 	''' get the list of places for logged in user'''
 
 	# should filter to where user id id logged in user ID
 	if 'logged_in' not in session:
-		userID = 1 # placeholder for now
-	else: 
+		userID = 1  # placeholder for now
+	else:
 		userID = session['userID']
-	return db.session.query(UserPlace).filter_by(userID=userID)
+	# want to return Places, filtered by UserPlace where userID
+	return db.session.query(Place).\
+			join(Place.userPlaces).\
+			filter(UserPlace.userID==userID)
 
-def getPlace(placeID, userID):
-	'''get single place object for given placeID and userID'''
-	return db.session.query(Place).filter_by(placeID=placeID,userID=userID).first()
+
+def getUserPlace(placeID, userID):
+	'''get single userPlace object for given placeID and userID'''
+	return db.session.query(UserPlace).filter_by(placeID=placeID, userID=userID).first()
+
 
 def getVisits(placeID):
 	if 'logged_in' not in session:
 		return None
 	else:
 		userID = session['userID']
-		return db.session.query(Visit).filter_by(userID=userID,placeID=placeID)
+		return db.session.query(Visit).filter_by(userID=userID, placeID=placeID)
 
 
 def getUserZip():
 	return db.session.query(User).filter_by(userID=session['userID']).first().zipCode
 
+
 def getLatLngFromZip(zipCode):
 	zipCheck(zipCode)
 	return db.session.query(ZipCode).filter_by(zipCode=zipCode).with_entities(
 		ZipCode.latitude, ZipCode.longitude).first()
-	
+
 
 def searchForPlace(searchTerm, **kwargs):
 
@@ -86,10 +94,8 @@ def searchForPlace(searchTerm, **kwargs):
 		# default to 20000
 		radius = 20000
 
-
-
 	# get lat and lng info from zip code table
-	lat,lng = getLatLngFromZip(zipCode)
+	lat, lng = getLatLngFromZip(zipCode)
 	# generate search url
 	url = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
 		'location={lat},{lng}&radius={radius}&'
@@ -103,26 +109,27 @@ def searchForPlace(searchTerm, **kwargs):
 	# use requests to lookup place
 	print(url)
 	request = requests.get(url)
-	# ensure valid response 
+	# ensure valid response
 	if request.status_code != 200:
 		raise AttributeError('Request returned bad response')
-	
+
 	# if valid response, return results from json response
 	results = request.json()['results']
 
 	# create empty list to hold places
 	places = []
-	# since search can (and most likely will) return multiple, 
+	# since search can (and most likely will) return multiple,
 	# iterate through and create Google Places out of them
 	# and append to places list
 	for result in results:
-		newPlace = GooglePlace(result['place_id'],result) #GooglePlace neeeds id and result
-		#filter out anywhere permanently closed
-		#maybe keep and notify instead?
-		#check if place already in user's list
-		#if so, replace key with 
+		# GooglePlace neeeds id and result
+		newPlace = GooglePlace(result['place_id'], result)
+		# filter out anywhere permanently closed
+		# maybe keep and notify instead?
+		# check if place already in user's list
+		# if so, replace key with
 
-		if db.session.query(Place).filter_by(placeID=result['place_id'],userID=session['userID']).first():
+		if db.session.query(UserPlace).filter_by(placeID=result['place_id'], userID=session['userID']).first():
 			newPlace.inList = True
 
 		if not newPlace.permanently_closed:
@@ -130,20 +137,35 @@ def searchForPlace(searchTerm, **kwargs):
 
 	return places
 
-def addPlaceToDB(placeID):
-	''' insert a place into the database'''
-	# kind of inefficient to take only ID and create full Google Place
-	# just to get name. Should update in future to take ID and name
-	googlePlace = GooglePlace(placeID)
-	newPlace = Place(
-		placeID=googlePlace.placeID, 
-		placeName=googlePlace.name, 
-		notes="",
-		userID=session['userID']
-	)
-	db.session.add(newPlace)
+
+def addPlaceToUserList(placeID):
+	''' Insert a place into the database for a user.
+	First ensures that the place is in database. Then,
+	Creates a new UserPlace record and adds it to the
+	database.'''
+
+	# ensure Place is in DB
+	newPlace = tryPlace(placeID)
+	newUserPlace = UserPlace(session['userID'], placeID)
+	db.session.add(newUserPlace)
 	db.session.commit()
 	return newPlace
+
+
+def tryPlace(placeID):
+	''' Checks if a place is already in DB 
+	If it is not, it inserts. If it is, does nothing.
+	Returns Place object'''
+	place = db.session.query(Place).filter_by(placeID=placeID).first()
+	if not place:
+		# kind of inefficient to take only ID and create full Google Place
+		# just to get name. Should update in future to take ID and name
+		googlePlace = GooglePlace(placeID)
+		place = Place(placeID, googlePlace.name)
+		db.session.add(place)
+		db.session.commit()
+	return place
+
 
 def milesToMeters(miles):
 	return int(int(miles)*1609.34)
@@ -153,10 +175,10 @@ def milesToMeters(miles):
 ##############
 
 @places_blueprint.route('/')
-def places():
+def userPlaces():
 	return render_template(
-		'places.html',
-		places=getPlaces()
+		'userPlaces.html',
+		places=getUserPlaces()
 	)
 
 @login_required
@@ -192,7 +214,7 @@ def addPlace(placeID):
 	# and we only send the ID and create a new google place out of it just to
 	# get the name when adding to DB. update in the future.
 	try:
-		newPlace = addPlaceToDB(placeID)
+		newPlace = addPlaceToUserList(placeID)
 		flash('{} is added to your list!'.format(newPlace.placeName))
 		return redirect(url_for('places.details', placeID=newPlace.placeID))
 	except IntegrityError:
@@ -202,20 +224,21 @@ def addPlace(placeID):
 		error = 'That place is already in this users list.'
 		# user query string should be saved and then used here instead of place.name
 		return render_template('places.results', searchTerm=newPlace.placeName, error=error)
-	
+
 @places_blueprint.route('/details/<string:placeID>')
 @login_required
 def details(placeID):
 	place = GooglePlace(placeID)
 	if 'logged_in' in session:
-		notes = db.session.query(Place).filter_by(placeID=placeID,userID=session['userID']).first().notes
+		notes = db.session.query(UserPlace).filter_by(
+		    placeID=placeID,userID=session['userID']).first().notes
 	else:
 		notes = None
 
-	#add a button to edit each visit.
-	return render_template( 
-		#note: template uses unique api key only for displaying maps
-		#when migrating to prod, restrict to only traffic from website 
+	# add a button to edit each visit.
+	return render_template(
+		# note: template uses unique api key only for displaying maps
+		# when migrating to prod, restrict to only traffic from website
 		'details.html',
 		place=place,
 		notes=notes,
@@ -246,7 +269,8 @@ def addVisit(placeID):
 @places_blueprint.route('/editVisit/<string:visitID>', methods=['GET','POST'])
 @login_required
 def editVisit(visitID):
-	visit = db.session.query(Visit).filter_by(userID=session['userID'],visitID=visitID).first()
+	visit = db.session.query(Visit).filter_by(
+	    userID=session['userID'],visitID=visitID).first()
 	print(visitID)
 	place = GooglePlace(visit.placeID)
 	error = None
@@ -259,7 +283,7 @@ def editVisit(visitID):
 			db.session.commit()
 			flash('Visit updated!')
 			return redirect(url_for('places.details', placeID=visit.placeID))
-	return render_template('addVisit.html', form=form, 
+	return render_template('addVisit.html', form=form,
 							error=error, place=place, visit=visit)
 
 
@@ -268,7 +292,7 @@ def editVisit(visitID):
 def editNotes(placeID):
 	'''temporary until I figure out how to javascript it in the details page'''
 	error = None
-	place = getPlace(placeID,session['userID'])
+	place = getUserPlace(placeID,session['userID'])
 	form = NotesForm(request.form)
 	if request.method == 'POST':
 		place.notes = form.notes.data
@@ -289,8 +313,8 @@ def editNotes(placeID):
 ###																			###
 ### allow people to edit notes on places page								###
 ###	--temp workaround is editNotes page. need JS for in page				###
-### --also having a date auto pop'd when a note is added. 
-### --maybe like a table
+# --also having a date auto pop'd when a note is added. 
+# --maybe like a table
 ###																			###
 ### have a search for places and add them to db								###
 ###	--will have to have a geolocate in search								###

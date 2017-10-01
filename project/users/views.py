@@ -67,8 +67,9 @@ def login():
 				session['logged_in'] = True
 				session['userID'] = user.userID
 				session['role'] = user.role
+				print(user.userID)
 				flash('Welcome {}!'.format(user.userName)) #can I make flash a toast?
-				return redirect(url_for('places.places'))
+				return redirect(url_for('places.userPlaces'))
 			else:
 				error = 'Invalid username or password'
 		else:

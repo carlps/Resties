@@ -1,4 +1,7 @@
 postgres
+  x-migrate sqlite to psql
+  --create test environment
+    --update tests
 
 coverage
 
@@ -11,16 +14,16 @@ advanced search
 x-zip and radius
     x-can you use js to hide and show advanced?
     x-handle new zip
---breaks on empty search
+!-breaks on empty search
   --require text in search
 
-toast
+toast?
 
 x-link to search if you have no restaurants
     --or just search form
 
 stats
 
-account mgmt
+!-account mgmt
 
 document

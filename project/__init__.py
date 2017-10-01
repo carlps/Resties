@@ -1,16 +1,20 @@
+import os
 import datetime
+
 from flask import Flask, render_template, request
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 
 app = Flask(__name__)
-app.config.from_pyfile('_config.py')
+app.config.from_object(os.environ['APP_SETTINGS'])
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 app.jinja_env.add_extension('jinja2.ext.do')
 
 from project.users.views import users_blueprint
 from project.places.views import places_blueprint
+
+print(os.environ['APP_SETTINGS'])
 
 # register our blueprints
 app.register_blueprint(users_blueprint)

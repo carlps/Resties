@@ -4,16 +4,26 @@
 import os
 from binascii import hexlify
 
-# grab the folder where this script lives
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-DATABASE= 'resties.db'
-CSRF_ENABLED = True
-SECRET_KEY = hexlify(os.urandom(24))
-DEBUG = False
+class Config(object):
+    CSRF_ENABLED = True
+    SECRET_KEY = hexlify(os.urandom(24))
+    DEBUG = False
+    TESTING = False
+    SQLALCHEMY_DATABASE_URI = os.environ['RESTIES_DB_URL']
 
-# define full path for database 
-DATABASE_PATH = os.path.join(basedir,DATABASE)
+class ProductionConfig(Config):
+    DEBUG = False
 
-# database uri
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_PATH
+class StagingConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+class TestingConfig(Config):
+    TESTING = True
+
+class DevelopmentConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+

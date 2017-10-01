@@ -1,8 +1,18 @@
+postgres
+
+coverage
+
+flask-GoogleMaps
+
+react
+bootstrap?
+
 advanced search
 x-zip and radius
     x-can you use js to hide and show advanced?
     x-handle new zip
 --breaks on empty search
+  --require text in search
 
 toast
 
@@ -12,3 +22,5 @@ x-link to search if you have no restaurants
 stats
 
 account mgmt
+
+document

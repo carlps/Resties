@@ -84,7 +84,8 @@ def register():
 			new_user = User(
 				userName=form.userName.data,
 				email=form.email.data,
-				password=bcrypt.generate_password_hash(form.password.data),
+				# decode encrypted password as utf-8
+				password=bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
 				zipCode=form.zipCode.data
 			)
 			zipCheck(form.zipCode.data)

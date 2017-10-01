@@ -14,7 +14,7 @@ from flask import (flash, redirect, render_template,
 from sqlalchemy.exc import IntegrityError
 
 from project import db
-from project.models import Place, GooglePlace, Visit, ZipCode, User
+from project.models import Place, GooglePlace, Visit, ZipCode, User, UserPlace
 from .forms import VisitForm, NotesForm, SearchForm
 from project.utils.zipUtils import zipCheck
 
@@ -49,7 +49,7 @@ def getPlaces():
 		userID = 1 # placeholder for now
 	else: 
 		userID = session['userID']
-	return db.session.query(Place).filter_by(userID=userID)
+	return db.session.query(UserPlace).filter_by(userID=userID)
 
 def getPlace(placeID, userID):
 	'''get single place object for given placeID and userID'''

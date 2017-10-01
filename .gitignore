@@ -7,3 +7,4 @@ htmlcov
 project/test.db
 error.log
 run_dev
+scratch

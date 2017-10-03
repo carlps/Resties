@@ -35,16 +35,22 @@ class User(db.Model):
     Links back to UserPlace table, as well as zip code table. """
     __tablename__ = 'users'
 
-    userID = db.Column(UUID(as_uuid=True), default=uuid.uuid4(), primary_key=True)
+    userID = db.Column(UUID(as_uuid=True),
+                       default=uuid.uuid4(), primary_key=True)
     userName = db.Column(db.String, unique=True, nullable=False)
+    fname = db.Column(db.String)
+    lname = db.Column(db.String)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     role = db.Column(db.String, default='user')
     zipCode = db.Column(db.String, nullable=False)
     userPlaces = db.relationship('UserPlace', backref=db.backref('user'))
 
-    def __init__(self, userName=None, email=None, password=None, role='user', zipCode=None):
+    def __init__(self, userName=None, fname=None, lname=None, email=None,
+                 password=None, role='user', zipCode=None):
         self.userName = userName
+        self.fname = fname
+        self.lname = lname
         self.email = email
         self.password = password
         self.role = role
@@ -60,8 +66,10 @@ class UserPlace(db.Model):
     if a user has high level notes on the restaurant. """
     __tablename__ = 'userPlaces'
 
-    userID = db.Column(UUID(as_uuid=True), db.ForeignKey('users.userID'), primary_key=True)
-    placeID = db.Column(db.String, db.ForeignKey('places.placeID'), primary_key=True)
+    userID = db.Column(UUID(as_uuid=True), db.ForeignKey(
+        'users.userID'), primary_key=True)
+    placeID = db.Column(db.String, db.ForeignKey(
+        'places.placeID'), primary_key=True)
     notes = db.Column(db.String, nullable=True)
 
     # something wrong here, expecting str but getting Column
@@ -69,6 +77,7 @@ class UserPlace(db.Model):
                                             [userID, placeID],
                                             [User.userID, Place.placeID]),{})
     '''
+
     def __init__(self, userID, placeID):
         self.userID = userID
         self.placeID = placeID
@@ -106,8 +115,8 @@ class ZipCode(db.Model):
 
 
 class GooglePlace(object):
-    """A place (usually restaurant or bar) as pulled from 
-    Google Places API. 
+    """A place (usually restaurant or bar) as pulled
+    Google Places API.
 
     Not meant to be stored in DB. Used when detail data is
     pulled from google API in app.
@@ -115,83 +124,89 @@ class GooglePlace(object):
     GooglePlace has the following properties:
 
     Attributes:
-            address_components: A list of dicts containing seperate 
+            address_components: A list of dicts containing seperate
                                                     adress components
                     types: type(s) of components. ex: ["country","political"]
-                    long_name: the full text description of the address component. 
-                                       ex: "United States"
-                    short_name: the abbreviation (if available). ex: "US" 
-                                            if no short name, short_name will be == long_name
-            formatted_address: A string of the human readable address. 
-                                               ex: '1513 17th St NW, Washington, DC 20036, USA'
-            formatted_phone_number: A string of the phone number in local format.
-                                                            ex: "(202) 733-5623"
+                    long_name: the full text description of the
+                                address component. ex: "United States"
+                    short_name: the abbreviation (if available). ex: "US"
+                                if no short name, short_name will be==long_name
+            formatted_address: A string of the human readable address.
+                               ex: '1513 17th St NW, Washington, DC 20036, USA'
+            formatted_phone_number: A string of the phone numb in local format.
+                                                        ex: "(202) 733-5623"
             adr_address: A string of the address in adr microformat
             geometry: A dict containing two dicts with geo info:
-                    location: a dict with two floats 'lat' and 'lng' containing 
+                    location: a dict with two floats 'lat' and 'lng' containing
                                       latitude and longitude
-                    viewport: a dict containing preferred viewport for a map with 
-                                      this place
-                                      keys are 'notheast' and 'southest' both containing 
-                                      dicts identical in format to location
+                    viewport: a dict containing preferred viewport
+                                for a map with this place
+                                keys are 'notheast' and 'southest' both
+                                containing dicts identical format to location
             icon: A string with the URL to a suggested map icon
-            international_phone_number: A string with the phone number in 
-                                                                    international format
-                                                                    ex: '+1 202-733-5623'
+            international_phone_number: A string with the phone number in
+                                                        international format
+                                                        ex: '+1 202-733-5623'
             name: A string with the human-readable name (AKA the business name)
                       ex: "Duke's Grocery"
-            opening_hours: A dict with info on the hours of operation for 
+            opening_hours: A dict with info on the hours of operation for
                                        the place
-                    open_now: A bool of whether or not the plaaceis open at 
+                    open_now: A bool of whether or not the plaaceis open at
                                       current time
-                    peiods: A list of 7 days. each contains a dict with the following:
-                            open: a dict of when the place opens:
-                                    day: an int from 0-6 corresponding to day of the week. 
+                    peiods: A list of 7 days. each contains a dict
+                            with the following:
+                                open: a dict of when the place opens:
+                                    day: an int from 0-6 corresponding to
+                                         day of the week.
                                              0 = Sun, 6 = Sat.
-                                    time: a string with time of day in 24 hour hhmm format 
+                                    time: a string with time of day in
+                                          24 hour hhmm format
                                              (in the place's timezone)
-                                             if a place is always open, day will be 0 and time 
+                                             if a place is always open,
+                                             day will be 0 and time
                                              will be '0000'.
-                            close: same as open, but for when it closes. if it closes 
-                                       after midnight, the day will be +1. If a place is 
-                                       always open, there will be no close section.   
-                    weekday_text: A list of seven strings with formatted open hours
-                                              ex: [0] == 'Monday: 11:00 AM - 2:00 AM'
-            permanently_closed: A bool if the place is permanently closed. 
+                            close: same as open, but for when it closes.
+                                    if it closes after midnight, the day
+                                    will be +1. If a place is always open,
+                                    there will be no close section.
+                    weekday_text: A list of 7 strings with formatted open hours
+                                    ex: [0] == 'Monday: 11:00 AM - 2:00 AM'
+            permanently_closed: A bool if the place is permanently closed.
                                                     Not in response if false
             photos: A list of dicts which contain references to images:
-                    photo_reference: a string with a unique ID for a photo request
+                    photo_reference: a string with a unique
+                                     ID for a photo request
                     height: an int of max height of the image
                     widhth: an int of max width of the image
-                    html_attributions: a list of attibutions. always present but 
-                                                       may be empty 
-            place_id: A string with the unique ID. Used to get info about 
+                    html_attributions: a list of attibutions. always present
+                                        butmay be empty
+            place_id: A string with the unique ID. Used to get info about
                               the place.
-                              ex: 'ChIJ5_UoOcG3t4kRuuU-rbm7vtc' 
-            scope: A string with the scope of the place_id. 
-                       either 'APP' or 'GOOGLE' 
-                       if "APP", the ID is unique to your app. 
+                              ex: 'ChIJ5_UoOcG3t4kRuuU-rbm7vtc'
+            scope: A string with the scope of the place_id.
+                       either 'APP' or 'GOOGLE'
+                       if "APP", the ID is unique to your app.
                        if "GOOGLE", it is public
             alt_ids: only used if local id
-            price_level: An int from 0 to 4 of the level of price 
+            price_level: An int from 0 to 4 of the level of price
                                      decided by google.
                                      0 == free, 4 == very expensive
             rating: A float of google's aggregated rating
-            types: A list of feature types (all strings) describing the place. 
+            types: A list of feature types (all strings) describing the place.
                        usually 'restaurant', 'food', 'bar', etc
-            url: A string with the url to the google page for the place. 
-                     Applications must link to or embed this page on any screen 
+            url: A string with the url to the google page for the place.
+                     Applications must link to or embed this page on any screen
                      that shows detailed results about the place to the user.
-            utc_offset: An int with the number of minutes this place's 
+            utc_offset: An int with the number of minutes this place's
                                     timezone is from UTC
                                     EST is -300 which is 5 hrs
-            vicinity: A string with the simplified address for the place. 
+            vicinity: A string with the simplified address for the place.
                               Just street address + locality. Nothing higher.
                               ex: '1513 17th Street Northwest, Washington'
             website:A string with the business' website
 
-    Probably not all properties will be used, but would rather have and not 
-    need than need and not have. One property (reviews) is left out as it's 
+    Probably not all properties will be used, but would rather have and not
+    need than need and not have. One property (reviews) is left out as it's
     large and not wanted.
 
     See more details about places and attributes at:
@@ -199,21 +214,21 @@ class GooglePlace(object):
     """
 
     def __init__(self, placeID, lookup=None):
-        ''' take placeID as param, 
+        ''' take placeID as param,
         and also lookup (which is a json response of Google data)
-        if lookup is None, we don't yet have place details, so: 
-                lookup and set all other 
+        if lookup is None, we don't yet have place details, so:
+                lookup and set all other
                 attributes with placeID in this __init__
         else if lookup False, we already have details so no need to lookup
         use checkAttr to make sure attribute is in response
 
         lookup is json response or none
-        when lookup is none, thats when we're using google maps api 
+        when lookup is none, thats when we're using google maps api
         to find info about a place we have the ID stored for in DB
 
         when lookup is passed in, that's when we're searching for a new place
         and the search results return one or more results.
-        so we've already searched through the API, returned the json response 
+        so we've already searched through the API, returned the json response
         and now just need to build the object.
         these will have less attributes than place lookup.
         '''

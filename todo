@@ -1,7 +1,9 @@
 postgres
   x-migrate sqlite to psql
-  --create test environment
-    --update tests
+  x-create test environment
+    x-update tests
+  --update to all lowercase
+  --update travis to new db
 
 coverage
 

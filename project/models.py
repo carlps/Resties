@@ -36,7 +36,7 @@ class User(db.Model):
     __tablename__ = 'users'
 
     userID = db.Column(UUID(as_uuid=True),
-                       default=uuid.uuid4(), primary_key=True)
+                       default=uuid.uuid4, primary_key=True)
     userName = db.Column(db.String, unique=True, nullable=False)
     fname = db.Column(db.String)
     lname = db.Column(db.String)
@@ -46,8 +46,8 @@ class User(db.Model):
     zipCode = db.Column(db.String, nullable=False)
     userPlaces = db.relationship('UserPlace', backref=db.backref('user'))
 
-    def __init__(self, userName=None, fname=None, lname=None, email=None,
-                 password=None, role='user', zipCode=None):
+    def __init__(self, userName=None, fname=None, lname=None,
+                 email=None, password=None, role='user', zipCode=None):
         self.userName = userName
         self.fname = fname
         self.lname = lname
@@ -57,7 +57,7 @@ class User(db.Model):
         self.zipCode = zipCode
 
     def __repr__(self):
-        return '<User {)}>'.format(self.userName)
+        return '<User {}>'.format(self.userName)
 
 
 class UserPlace(db.Model):

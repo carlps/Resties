@@ -1,26 +1,23 @@
 # tests/test_main.py
 
-import os 
+import os
 import unittest
 
 from project import app, db
 from project._config import basedir
 from project.models import User
 
-TEST_DB = 'test.db'
+os.environ['APP_SETTINGS'] = "project._config.TestingConfig"
+
 
 class MainTests(unittest.TestCase):
 
     ##########################
-    ### Setup and teardown ###
+    #   Setup and teardown   #
     ##########################
 
     def setUp(self):
-        app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED'] = False
-        app.config['DEBUG'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-            os.path.join(basedir, TEST_DB)
+        app.config.from_object(os.environ['APP_SETTINGS'])
         self.app = app.test_client()
         db.create_all()
 
@@ -31,7 +28,7 @@ class MainTests(unittest.TestCase):
         db.drop_all()
 
     ######################
-    ### helper methods ###
+    #   helper methods   #
     ######################
 
     def login(self, name, password):
@@ -39,19 +36,18 @@ class MainTests(unittest.TestCase):
             name=name, password=password), follow_redirects=True)
 
     #############
-    ### tests ###
+    #   tests   #
     #############
 
     def test_404_error(self):
         response = self.app.get('/this-route-does-not-exist/')
-        self.assertEqual(response.status_code,404)
+        self.assertEqual(response.status_code, 404)
         self.assertIn(b'Sorry. There\'s nothing here', response.data)
 
     def test_index(self):
         """ Ensure flask was set up correctly"""
         response = self.app.get('/', content_type='html/text')
-        self.assertEqual(response.status_code,200)
-
+        self.assertEqual(response.status_code, 200)
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 # project/places/views.py
 
 ###############
-### imports ###
+#   imports   #
 ###############
 
 from functools import wraps
@@ -19,13 +19,13 @@ from .forms import VisitForm, NotesForm, SearchForm
 from project.utils.zipUtils import zipCheck
 
 ##############
-### config ###
+#   config   #
 ##############
 
 places_blueprint = Blueprint('places', __name__)
 
 ########################
-### helper functions ###
+#   helper functions   #
 ########################
 
 
@@ -59,7 +59,8 @@ def getUserPlaces():
 
 def getUserPlace(placeID, userID):
     '''get single userPlace object for given placeID and userID'''
-    return db.session.query(UserPlace).filter_by(placeID=placeID, userID=userID).first()
+    return db.session.query(UserPlace).filter_by(placeID=placeID,
+                                                 userID=userID).first()
 
 
 def getVisits(placeID):
@@ -67,11 +68,13 @@ def getVisits(placeID):
         return None
     else:
         userID = session['userID']
-        return db.session.query(Visit).filter_by(userID=userID, placeID=placeID)
+        return db.session.query(Visit).filter_by(userID=userID,
+                                                 placeID=placeID)
 
 
 def getUserZip():
-    return db.session.query(User).filter_by(userID=session['userID']).first().zipCode
+    return db.session.query(User).\
+        filter_by(userID=session['userID']).first().zipCode
 
 
 def getLatLngFromZip(zipCode):
@@ -129,8 +132,9 @@ def searchForPlace(searchTerm, **kwargs):
         # check if place already in user's list
         # if so, replace key with
 
-        if db.session.query(UserPlace).filter_by(placeID=result['place_id'],
-                                            userID=session['userID']).first():
+        if db.session.query(UserPlace).\
+            filter_by(placeID=result['place_id'],
+                      userID=session['userID']).first():
             newPlace.inList = True
 
         if not newPlace.permanently_closed:
@@ -172,7 +176,7 @@ def milesToMeters(miles):
     return int(int(miles) * 1609.34)
 
 ##############
-### routes ###
+#   routes   #
 ##############
 
 
@@ -226,7 +230,9 @@ def addPlace(placeID):
         error = 'That place is already in this users list.'
         # user query string should be saved and then used here instead of
         # place.name
-        return render_template('places.results', searchTerm=newPlace.placeName, error=error)
+        return render_template('places.results',
+                               searchTerm=newPlace.placeName,
+                               error=error)
 
 
 @places_blueprint.route('/details/<string:placeID>')
@@ -269,7 +275,8 @@ def addVisit(placeID):
             db.session.commit()
             flash('Visit recorded! I hope you enjoyed!')
             return redirect(url_for('places.details', placeID=placeID))
-    return render_template('addVisit.html', form=form, error=error, place=place)
+    return render_template('addVisit.html', form=form,
+                           error=error, place=place)
 
 
 @places_blueprint.route('/editVisit/<string:visitID>', methods=['GET', 'POST'])
@@ -305,37 +312,38 @@ def editNotes(placeID):
         db.session.commit()
         flash('Notes updated!')
         return redirect(url_for('places.details', placeID=placeID))
-    return render_template('editNotes.html', place=place, error=error, form=form)
+    return render_template('editNotes.html', place=place,
+                           error=error, form=form)
 
 
 ###############################################################################
-#################################### TODO #####################################
+#                                    TODO                                     #
 ###############################################################################
-### clean up home page. make it easier to find restie on your list          ###
-### --did a lot, but could do more                                          ###
-###                                                                         ###
-### allow people to edit notes on places page                               ###
-### --temp workaround is editNotes page. need JS for in page                ###
+#   clean up home page. make it easier to find restie on your list            #
+#   --did a lot, but could do more                                            #
+#                                                                             #
+#   allow people to edit notes on places page                                 #
+#   --temp workaround is editNotes page. need JS for in page                  #
 # --also having a date auto pop'd when a note is added.
 # --maybe like a table
-###                                                                         ###
-### have a search for places and add them to db                             ###
-### --will have to have a geolocate in search                               ###
-### --or better, just have a zip for user                                   ###
-### ----have zips now                                                       ###
-###                                                                         ###
-### search bar in header                                                    ###
-### --returns places in list (if found)                                     ###
-### --and wider search                                                      ###
-### --or maybe have a radio button?                                         ###
-###                                                                         ###
-### maps widget in place details                                            ###
-### --done with iframe                                                      ###
-### --maybe look into js?                                                   ###
-### --also NOTE: created new api creds for only map rendering               ###
-### ----need to restrict to my website when prod                            ###
-###                                                                         ###
-###                                                                         ###
+#                                                                             #
+#   have a search for places and add them to db                               #
+#   --will have to have a geolocate in search                                 #
+#   --or better, just have a zip for user                                     #
+#   ----have zips now                                                         #
+#                                                                             #
+#   search bar in header                                                      #
+#   --returns places in list (if found)                                       #
+#   --and wider search                                                        #
+#   --or maybe have a radio button?                                           #
+#                                                                             #
+#   maps widget in place details                                              #
+#   --done with iframe                                                        #
+#   --maybe look into js?                                                     #
+#   --also NOTE: created new api creds for only map rendering                 #
+#   ----need to restrict to my website when prod                              #
+#                                                                             #
+#                                                                             #
 ###############################################################################
 ###############################################################################
 ###############################################################################

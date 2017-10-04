@@ -9,8 +9,6 @@ from project import app, db, bcrypt
 from project._config import basedir
 from project.models import Place, User
 
-os.environ['APP_SETTINGS'] = "project._config.TestingConfig"
-
 
 class PlacesTests(unittest.TestCase):
 
@@ -20,6 +18,7 @@ class PlacesTests(unittest.TestCase):
 
     # executed prior to each test
     def setUp(self):
+        os.environ['APP_SETTINGS'] = "project._config.TestingConfig"
         app.config.from_object(os.environ['APP_SETTINGS'])
         self.app = app.test_client()
         db.create_all()

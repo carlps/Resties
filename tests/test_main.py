@@ -17,6 +17,7 @@ class MainTests(unittest.TestCase):
     ##########################
 
     def setUp(self):
+        os.environ['APP_SETTINGS'] = "project._config.TestingConfig"
         app.config.from_object(os.environ['APP_SETTINGS'])
         self.app = app.test_client()
         db.create_all()

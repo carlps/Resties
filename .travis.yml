@@ -5,7 +5,7 @@ intall: pip install -r requirements.txt
 script: nosetests
 services: postgresql
 before_script:
-    - psql -c 'CREATE DATABASE resties_tst;' - U postgres
+    - psql -c 'CREATE DATABASE resties_tst;' -U postgres
     - psql -c "CREATE USER resties_admin with PASSWORD 'asdf4321';" -U postgres
 env:
   matrix:

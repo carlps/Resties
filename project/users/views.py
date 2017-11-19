@@ -12,7 +12,7 @@ from flask import flash, redirect, render_template
 from flask import request, session, url_for, Blueprint
 from sqlalchemy.exc import IntegrityError
 
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, UpdateProfileForm
 from project import db, bcrypt
 from project.models import User, ZipCode
 from project.utils.zipUtils import zipCheck
@@ -111,3 +111,25 @@ def register():
                 error = 'That username and/or email already exist.'
                 return render_template('register.html', form=form, error=error)
     return render_template('register.html', form=form, error=error)
+
+
+@users_blueprint.route('/update_profile/', methods=['GET','POST'])
+@login_required
+def update_profile():
+    error = None
+    form = UpdateProfileForm(request.form)
+    userID = session['userID']
+    user = db.session.query(User).filter_by(userID=userID).first()
+    print(user)
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            user.userName = form.userName.data
+            user.fname = form.fname.data
+            user.lname = form.lname.data
+            user.email = form.email.data
+            user.zipCode = form.zipCode.data
+            db.session.commit()
+            flash('Ok updated you, playa')
+            return redirect(url_for('places.userPlaces'))
+    return render_template('update_profile.html', form=form, error=error, user=user)
+

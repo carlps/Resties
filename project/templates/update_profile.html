@@ -1,0 +1,71 @@
+{% extends "_base.html" %}
+{% block content %}
+  <div class="container">
+    <h3>Update your profile</h3>
+    <div class="row">
+      <form class="col s12" method="POST" role="form" action="{{ url_for('users.update_profile') }}">
+        {{ form.csrf_token }}
+        <div class="row">
+          <div class="input-field col s12 m6">
+            {{ form.userName(class="validate", id="userName_input", value=user.userName) }}
+            <label for="userName_input">Username</label>
+            {% if form.userName.errors %}
+              <span class="error">
+                {% for error in form.userName.errors %}
+                  {{ error }}
+                {% endfor %}
+              </span>
+            {% endif %}
+          </div>
+          <div class="input-field col s12 m6">
+            {{ form.email(class="validate", id="email_input", value=user.email) }}
+            <label for="email_input">Email</label>
+            {% if form.email.errors %}
+              <span class="error">
+                {% for error in form.email.errors %}
+                  {{ error }}
+                {% endfor %}
+              </span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12 m4">
+            {{ form.fname(class="validate", id="fname_input", value=user.fname) }}
+            <label for="fname_input">First Name</label>
+            {% if form.fname.errors %}
+            <span class="error">
+              {% for error in form.fname.errors %}
+                  {{ error }}
+                {% endfor %}
+              </span>
+            {% endif %}
+          </div>
+          <div class="input-field col s12 m4">
+            {{ form.lname(class="validate", id="lname_input", value=user.lname) }}
+            <label for="lname_input">Last Name</label>
+            {% if form.lname.errors %}
+              <span class="error">
+                {% for error in form.lname.errors %}
+                  {{ error }}
+                {% endfor %}
+              </span>
+            {% endif %}
+          </div>
+          <div class="input-field col s12 m4">
+            {{ form.zipCode(class="validate", id="zipCode_input", value=user.zipCode) }}
+            <label for="zipCode_input">Zip Code</label>
+            {% if form.zipCode.errors %}
+                <span class="error">
+                  {% for error in form.zipCode.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </span>
+              {% endif %}
+            </div>
+        </div>
+        <button class="btn waves-effect waves-light" type="submit" name="action">Save Changes</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

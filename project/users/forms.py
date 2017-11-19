@@ -50,3 +50,24 @@ class LoginForm(Form):
         'Password',
         validators=[DataRequired()]
     )
+
+
+class UpdateProfileForm(Form):
+    userName = StringField(
+        'Username',
+        validators=[DataRequired()]
+    )
+    fname = StringField('First Name')
+    lname = StringField('Last Name')
+    zipCode = StringField(
+        'Zip Code',
+        validators=[DataRequired(),
+                    Length(min=5, max=5,
+                           message='Zip Code must be exactly 5 digits'),
+                    zipCheck]
+    )
+    email = StringField(
+        'Email',
+        validators=[DataRequired(), Email()]
+    )
+

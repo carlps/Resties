@@ -27,8 +27,12 @@ x-link to search if you have no restaurants
 stats
 
 !-account mgmt
-  !! add name to register form
-  -- edit account form
+  x- add name to register form
+  x- edit account form
+     -- validate username before updating
+  -- page to just show user info, then from there link to update
+  -- change pword
+  -- unit tests boiii
 
 multiple lists on front page
   -- fav places (add fav option to place)

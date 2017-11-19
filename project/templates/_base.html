@@ -28,7 +28,7 @@
             {% else %}
             <li><a href="/logout">log out</a></li>
             <li><a href="/search">search</a></li>
-            <li><a href="/update_profile">update profile</a></li>
+            <li><a href="{{ url_for('users.user_info') }}">profile</a></li>
             {% endif %}
           </ul>
           <ul class="side-nav" id="mobile-demo">
@@ -38,7 +38,7 @@
             {% else %}
             <li><a href="/search">search</a></li>
             <li><a href="/logout">log out</a></li>  
-            <l1><a href="/update_profile">update profile</a></li>
+            <li><a href="{{ url_for('users.user_info') }}">profile</a></li>
             {% endif %}
           </ul>
         </div>

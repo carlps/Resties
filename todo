@@ -18,6 +18,7 @@ x-zip and radius
     x-handle new zip
 !-breaks on empty search
   --require text in search
+!-breaks on bad zip
 
 toast?
 
@@ -30,7 +31,7 @@ stats
   x- add name to register form
   x- edit account form
      -- validate username before updating
-  -- page to just show user info, then from there link to update
+  x- page to just show user info, then from there link to update
   -- change pword
   -- unit tests boiii
 

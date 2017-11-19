@@ -113,6 +113,15 @@ def register():
     return render_template('register.html', form=form, error=error)
 
 
+@users_blueprint.route('/user_info/', methods=['GET'])
+@login_required
+def user_info():
+    error = None
+    userID = session['userID']
+    user = db.session.query(User).filter_by(userID=userID).first()
+    return render_template('user_info.html', user=user)
+
+
 @users_blueprint.route('/update_profile/', methods=['GET','POST'])
 @login_required
 def update_profile():
@@ -130,6 +139,6 @@ def update_profile():
             user.zipCode = form.zipCode.data
             db.session.commit()
             flash('Ok updated you, playa')
-            return redirect(url_for('places.userPlaces'))
+            return redirect(url_for('users.user_info'))
     return render_template('update_profile.html', form=form, error=error, user=user)
 

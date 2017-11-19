@@ -17,8 +17,8 @@ class UsersTests(unittest.TestCase):
 
     # executed prior to each test
     def setUp(self):
-        os.environ['APP_SETTINGS'] = "project._config.TestingConfig"
-        app.config.from_object(os.environ['APP_SETTINGS'])
+        # os.environ['APP_SETTINGS'] = "project._config.TestingConfig"
+        app.config.from_object(os.environ['TEST_SETTINGS'])
         self.app = app.test_client()
         db.create_all()
 
@@ -199,6 +199,38 @@ class UsersTests(unittest.TestCase):
         response = self.register('isaac', None, None, 'iceman@yoohoo.com',
                       'iceyboi', 'iceyboi', '87004')
         self.assertIn(b'Thanks for registering. Please login.', response.data)
+
+    def test_user_can_see_profile(self):
+        self.register()
+        self.login()
+        response = self.app.get('/user_info/')
+        self.assertIn(b'Name: isaac torres', response.data)
+
+
+    def test_user_can_update_profle(self):
+        self.register()
+        self.login()
+        response = self.app.post('/update_profile/',
+                                 data=dict(userName='julianna',
+                                           fname='julianna',
+                                           lname='torres',
+                                           email='juli@nnatorr.es',
+                                           zipCode='94133'),
+                                follow_redirects=True)
+        self.assertIn(b'Name: julianna torres', response.data)
+
+    def test_user_update_invalid_zip(self):
+        self.register()
+        self.login()
+        response = self.app.post('/update_profile/',
+                                 data=dict(userName='julianna',
+                                           fname='julianna',
+                                           lname='torres',
+                                           email='juli@nnatorr.es',
+                                           zipCode='abcdef'),
+                                follow_redirects=True)
+        self.assertIn(b'Zip code can only be numeric values', response.data)
+
 
 if __name__ == '__main__':
     unittest.main()

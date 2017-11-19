@@ -90,6 +90,8 @@ def register():
         if form.validate_on_submit():
             new_user = User(
                 userName=form.userName.data,
+                fname=form.fname.data,
+                lname=form.lname.data,
                 email=form.email.data,
                 # decode encrypted password as utf-8
                 password=bcrypt.generate_password_hash(

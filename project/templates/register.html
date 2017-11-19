@@ -19,19 +19,6 @@
               {% endif %}
             </div>
             <div class="input-field col s12 m6">
-              {{ form.zipCode(class="validate", id="zipCode_input") }}
-              <label for="zipCode_input">Zip Code</label>
-              {% if form.zipCode.errors %}
-                <span class="error">
-                  {% for error in form.zipCode.errors %}
-                    {{ error }}
-                  {% endfor %}
-                </span>
-              {% endif %}
-            </div>
-          </div>
-          <div class="row">
-            <div class="input-field col s12">
               {{ form.email(class="validate", id="email_input") }}
               <label for="email_input">Email</label>
               {% if form.email.errors %}
@@ -44,7 +31,42 @@
             </div>
           </div>
           <div class="row">
-            <div class="input-field col s12">
+            <div class="input-field col s12 m4">
+              {{ form.fname(class="validate", id="fname_input") }}
+              <label for="fname_input">First Name</label>
+              {% if form.fname.errors %}
+              <span class="error">
+                {% for error in form.fname.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </span>
+              {% endif %}
+            </div>
+            <div class="input-field col s12 m4">
+              {{ form.lname(class="validate", id="lname_input") }}
+              <label for="lname_input">Last Name</label>
+              {% if form.lname.errors %}
+                <span class="error">
+                  {% for error in form.lname.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </span>
+              {% endif %}
+            </div>
+            <div class="input-field col s12 m4">
+              {{ form.zipCode(class="validate", id="zipCode_input") }}
+              <label for="zipCode_input">Zip Code</label>
+              {% if form.zipCode.errors %}
+                <span class="error">
+                  {% for error in form.zipCode.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m6">
               {{ form.password(class="validate", id="password_input") }}
               <label for="password_input">Password</label>
               {% if form.password.errors %}
@@ -55,9 +77,7 @@
                 </span>
               {% endif %}
             </div>
-          </div>
-          <div class="row">
-            <div class="input-field col s12">
+            <div class="input-field col s12 m6">
               {{ form.confirm(class="validate", id="confirm_input") }}
               <label for="confirm_input">Confirm Password</label>
               {% if form.confirm.errors %}

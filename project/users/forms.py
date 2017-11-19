@@ -17,6 +17,8 @@ class RegisterForm(Form):
         'Username',
         validators=[DataRequired()]
     )
+    fname = StringField('First Name')
+    lname = StringField('Last Name')
     zipCode = StringField(
         'Zip Code',
         validators=[DataRequired(),

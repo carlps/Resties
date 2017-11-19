@@ -3,7 +3,7 @@ postgres
   x-create test environment
     x-update tests
   --update to all lowercase
-  --update travis to new db
+  x-update travis to new db
 
 coverage
 
@@ -28,5 +28,13 @@ stats
 
 !-account mgmt
   !! add name to register form
+  -- edit account form
+
+multiple lists on front page
+  -- fav places (add fav option to place)
+  -- never been
+  -- on deck (add on deck option to place)
+  
+
 
 document

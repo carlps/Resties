@@ -215,7 +215,8 @@ class UsersTests(unittest.TestCase):
                                            fname='julianna',
                                            lname='torres',
                                            email='juli@nnatorr.es',
-                                           zipCode='94133'),
+                                           zipCode='94133',
+                                           search_radius=12),
                                 follow_redirects=True)
         self.assertIn(b'Name: julianna torres', response.data)
 
@@ -227,9 +228,24 @@ class UsersTests(unittest.TestCase):
                                            fname='julianna',
                                            lname='torres',
                                            email='juli@nnatorr.es',
-                                           zipCode='abcdef'),
+                                           zipCode='abcdef',
+                                           search_radius=12),
                                 follow_redirects=True)
         self.assertIn(b'Zip code can only be numeric values', response.data)
+
+    def test_user_update_search_radius(self):
+        self.register()
+        self.login()
+        response = self.app.post('/update_profile/',
+                                 data=dict(userName='isaac',
+                                           fname='isaac',
+                                           lname='torres',
+                                           email='iceman@yoohoo.com',
+                                           zipCode='87004',
+                                           search_radius=20),
+                                follow_redirects=True)
+        self.assertIn(b'Default Search Radius: 20', response.data)
+
 
 
 if __name__ == '__main__':

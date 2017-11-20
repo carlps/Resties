@@ -3,7 +3,7 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, IntegerField
 from wtforms.validators import DataRequired, Length, EqualTo
-from wtforms.validators import Email, ValidationError
+from wtforms.validators import Email, ValidationError, NumberRange
 
 
 def zipCheck(form, field):
@@ -70,5 +70,9 @@ class UpdateProfileForm(Form):
         'Email',
         validators=[DataRequired(), Email()]
     )
-    search_radius = IntegerField('Search Radius', validators=[DataRequired()])
+    search_number_message = "Must be a positive number!"
+    search_radius = IntegerField(
+        'Search Radius',
+        validators=[DataRequired(message=search_number_message),
+                    NumberRange(min=0,message=search_number_message)])
 

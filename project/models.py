@@ -44,10 +44,11 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
     role = db.Column(db.String, default='user')
     zipCode = db.Column(db.String, nullable=False)
+    search_radius = db.Column(db.Integer, default=12, nullable=False)
     userPlaces = db.relationship('UserPlace', backref=db.backref('user'))
 
-    def __init__(self, userName=None, fname=None, lname=None,
-                 email=None, password=None, role='user', zipCode=None):
+    def __init__(self, userName=None, fname=None, lname=None, email=None,
+                 password=None, role='user', zipCode=None, search_radius=12):
         self.userName = userName
         self.fname = fname
         self.lname = lname
@@ -55,6 +56,7 @@ class User(db.Model):
         self.password = password
         self.role = role
         self.zipCode = zipCode
+        self.search_radius = search_radius
 
     def __repr__(self):
         return '<User {}>'.format(self.userName)

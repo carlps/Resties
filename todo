@@ -32,6 +32,7 @@ stats
   x- edit account form
      -- validate username before updating
   x- page to just show user info, then from there link to update
+  -- add default search radius to user
   -- change pword
   -- unit tests boiii
 

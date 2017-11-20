@@ -10,6 +10,7 @@ before_script:
 env:
   global:
   - APP_SETTINGS="project._config.TestingConfig"
+  - TEST_SETTINGS="project._config.TestingConfig"
   - RESTIES_DB_URL="postgresql://localhost/resties_test"
   - TEST_DB_URL="postgresql://localhost/resties_test"
   matrix:

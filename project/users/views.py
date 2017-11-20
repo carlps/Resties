@@ -96,7 +96,8 @@ def register():
                 # decode encrypted password as utf-8
                 password=bcrypt.generate_password_hash(
                     form.password.data).decode('utf-8'),
-                zipCode=form.zipCode.data
+                zipCode=form.zipCode.data,
+                search_radius=12  # default search radius
             )
             print(new_user)
             zipCheck(form.zipCode.data)

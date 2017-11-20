@@ -77,6 +77,11 @@ def getUserZip():
         filter_by(userID=session['userID']).first().zipCode
 
 
+def getUserRadius():
+    return db.session.query(User.search_radius).\
+            filter_by(userID=session['userID']).first()[0]
+
+
 def getLatLngFromZip(zipCode):
     zipCheck(zipCode)
     return db.session.query(ZipCode).filter_by(zipCode=zipCode).with_entities(
@@ -192,8 +197,9 @@ def userPlaces():
 @places_blueprint.route('/search', methods=['GET', 'POST'])
 def search():
     zipCode = getUserZip()
-    radius = 12
+    radius = getUserRadius()
     form = SearchForm(zipCode, radius)
+    print(radius)
     if request.method == 'POST':
         searchTerm = request.form['searchTerm'].replace(' ', '+')
         zipCode = request.form['zipCode']

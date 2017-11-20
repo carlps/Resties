@@ -29,7 +29,10 @@
           {{ form.radius(id="radius") }}
           <label for="radius">Radius (Miles)</label>
         </li>
-        <ul class="col s12 m2" style="padding-top: 25px"> <!--temp workaround for button -->
+        <li class="col s12">
+          <i>If you're having issues with your search radius, try <a href="{{ url_for('users.update_profile') }}">changing your default search radius</a>.</i>
+        </li>
+      </ul>
           
         </div>
       </div>

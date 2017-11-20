@@ -33,6 +33,8 @@ stats
      -- validate username before updating
   x- page to just show user info, then from there link to update
   -- add default search radius to user
+    -- fill in default search radius on search form
+    -- add search radius to user profile
   -- change pword
   -- unit tests boiii
 

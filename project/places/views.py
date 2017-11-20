@@ -193,8 +193,8 @@ def userPlaces():
     )
 
 
-@login_required
 @places_blueprint.route('/search', methods=['GET', 'POST'])
+@login_required
 def search():
     zipCode = getUserZip()
     radius = getUserRadius()

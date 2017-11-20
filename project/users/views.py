@@ -138,6 +138,7 @@ def update_profile():
             user.lname = form.lname.data
             user.email = form.email.data
             user.zipCode = form.zipCode.data
+            user.search_radius = form.search_radius.data
             db.session.commit()
             flash('Ok updated you, playa')
             return redirect(url_for('users.user_info'))

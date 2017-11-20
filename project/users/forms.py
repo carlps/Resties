@@ -1,7 +1,7 @@
 # project/users/forms.py
 
 from flask_wtf import Form
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, IntegerField
 from wtforms.validators import DataRequired, Length, EqualTo
 from wtforms.validators import Email, ValidationError
 
@@ -70,4 +70,5 @@ class UpdateProfileForm(Form):
         'Email',
         validators=[DataRequired(), Email()]
     )
+    search_radius = IntegerField('Search Radius', validators=[DataRequired()])
 

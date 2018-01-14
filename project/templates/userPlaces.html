@@ -31,10 +31,9 @@
           {% set headers = [] %}
           {% for place in places|sort(attribute='placeName') %}
           <ul>
-            {% if place.placeName[0].upper() != first_letter %}
-              {% set first_letter = place.placeName[0].upper() %}
-              {% do headers.append(first_letter) %}
-              <li id="{{ first_letter }}" class="section scrollspy"><h5>{{ first_letter }}</h5>  </li>
+            {% if place.placeName[0].upper() != headers[-1] %}
+              {% do headers.append(place.placeName[0].upper()) %}
+              <li id="{{ headers[-1] }}" class="section scrollspy"><h5>{{ headers[-1] }}</h5>  </li>
               <div class="divider"></div>
             {% endif %}
             <li>

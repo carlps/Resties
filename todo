@@ -49,6 +49,7 @@ multiple lists on front page
   -- on deck (add on deck option to place)
   
 FAB to add/search a new restie.
+  -- force footer to bottom. Button should not go below footer.
 Add a Today button (or default to today) when adding a visit.
 
 document

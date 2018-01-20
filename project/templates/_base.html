@@ -54,6 +54,15 @@
         {% endif %}
         {% block content %}
         {% endblock %}
+      {% if session.logged_in %}
+        <div class="fixed-action-btn">
+          <span title="Search for a new place!">
+            <a href={{ url_for('places.search') }} class="btn-floating btn-large waves-effect waves-light">
+              <i class="material-icons">search</i>
+            </a>
+          </span>
+        </div>
+      {% endif %}
     </div>
     </main>
     <footer class="page-footer teal lighten-3">

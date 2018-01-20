@@ -19,11 +19,13 @@ x-zip and radius
 !-breaks on empty search
   --require text in search
 !-breaks on bad zip
+--doesn't break but search is not useful
 
 toast?
 
 x-link to search if you have no restaurants
     --or just search form
+--sign in form should be on homepage
 
 stats
 
@@ -32,17 +34,21 @@ stats
   x- edit account form
      -- validate username before updating
   x- page to just show user info, then from there link to update
-  -- add default search radius to user
-    -- fill in default search radius on search form
-    -- add search radius to user profile
-  -- change pword
-  -- unit tests boiii
+  x- add default search radius to user
+    x- fill in default search radius on search form
+    x- add search radius to user profile
+  !- change pword
+  x- unit tests boiii
+
+store joined date on user (capture date on registration)
+Add a home button to navbar
 
 multiple lists on front page
   -- fav places (add fav option to place)
   -- never been
   -- on deck (add on deck option to place)
   
-
+FAB to add/search a new restie.
+Add a Today button (or default to today) when adding a visit.
 
 document

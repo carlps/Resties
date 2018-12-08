@@ -7,7 +7,7 @@ click==6.7
 coverage==3.7.1
 ecdsa==0.13
 enum34==1.1.6
-Flask==0.12.2
+Flask==0.12.3
 Flask-Bcrypt==0.7.1
 Flask-Migrate==2.1.1
 Flask-RESTful==0.3.5
@@ -29,7 +29,7 @@ pyparsing==2.1.10
 python-dateutil==2.6.0
 python-editor==1.0.3
 pytz==2016.7
-requests==2.12.5
+requests==2.20.0
 six==1.10.0
 SQLAlchemy==1.1.14
 Werkzeug==0.12.2

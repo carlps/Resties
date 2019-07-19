@@ -170,7 +170,7 @@ class PlacesTests(unittest.TestCase):
         self.app.post('/addPlace/ChIJ95RxxRN4IocRUhvj7gXGxEo',
                       follow_redirects=True)
         response = self.app.post('/search',
-                                 data=dict(searchTerm='the range'),
+                                 data=dict(searchTerm='range bernalillo'),
                                  follow_redirects=True)
         self.assertNotIn(
             b'/addPlace/ChIJ95RxxRN4IocRUhvj7gXGxEo', response.data)

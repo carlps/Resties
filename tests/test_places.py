@@ -159,7 +159,7 @@ class PlacesTests(unittest.TestCase):
         self.register()
         self.login()
         response = self.app.post('/search',
-                                 data=dict(searchTerm='the range',
+                                 data=dict(searchTerm='range bernalillo',
                                            zipCode=87004, radius=10),
                                  follow_redirects=True)
         self.assertIn(b'/addPlace/ChIJ95RxxRN4IocRUhvj7gXGxEo', response.data)
@@ -182,7 +182,7 @@ class PlacesTests(unittest.TestCase):
         self.app.post('/addPlace/ChIJ95RxxRN4IocRUhvj7gXGxEo',
                       follow_redirects=True)
         response = self.app.get('/', follow_redirects=True)
-        self.assertIn(b'The Range Cafe', response.data)
+        self.assertIn(b'Range Cafe Bernalillo', response.data)
 
     # maybe test GooglePlace attributes?
 

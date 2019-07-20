@@ -1,12 +1,12 @@
 language: python
 python:
-  - '3.6'
+- '3.6'
 install: pip install -r requirements.txt
 script: nosetests
 services: postgresql
 before_script:
-    - psql -c 'CREATE DATABASE resties_test;' -U postgres
-    - psql -c "CREATE USER resties_admin with PASSWORD 'asdf4321';" -U postgres
+- psql -c 'CREATE DATABASE resties_test;' -U postgres
+- psql -c "CREATE USER resties_admin with PASSWORD 'asdf4321';" -U postgres
 env:
   global:
   - APP_SETTINGS="project._config.TestingConfig"
@@ -18,6 +18,6 @@ env:
 deploy:
   provider: heroku
   api_key:
-    secure: SZE9A5FRWoRGGGUEmz+aDcuvezm/p3ZmqkOIZVlaDw1Wfwf9+Wg3YKJwnv7gFCIDoRSXsM/bJOKU1MxlkVYEXTfTew832EdeKs3Z06IW3URzohrVFvuD93DhMdg9qGSsbhM/tMEaD8JFC3hniMnBQvspAZ4JnZYJD0AkgZ5yiJ8HlZqtsb+vv+XTlxY/Zwt62cdm3WNV/d7cFbPyAMbRQJJf45uDOf7vOTQwdqgA/kfmznQqiC3xwH6CPzonXwVZ4JRPwSWVwdbvdmWFJWCh2vH5LvV3VVQ0ogXjHB4zvP7JXyFETy+xgdrdjV/k+7UpoZwj8CsZjVnwQeuabi+0clt5UIltZgh1LTPZWt/F6pIDccLzrGxRixlb6LYQ3yndG9fdVVjmPIjLvtmvRj/75OEB/wb9JvCc1NvX+UMpzHWgMh1KZQajA8NJCRdgKi0JRRXEbayoBFeWxaJZP5z7CD2xhSx0PePPi9P0KL1yeERvHQUjue8gWu5kAUKsgyh6dLQA1r4XKajTFud1Vje0/lqdXD2o+SmXLHgPoY4WhWuOC91dgiK1LHa1uxfdWf9WTP/MK0WeLr4bq/2U3BOss/2gptFWvu7LMzcxyQso/NW/Jueg1sDkhelmmUOnTck0W8wowqMN7wXGTrCCRdeLW+p6BaMSyWnSLeekN/hD2ZI=
+    secure: uWNtfkG5hmP9gPJfS2hr/k7zll2R660/P9xk1GP1Nz3tLSfXC68lHDIOH1hQUiWAvpy4TVfztmV+SlvKyDMKQPg58xQZ9DdSFymSXMYl3GNENlKZ0XBnwDKR+cpRYH3sVdYScAm5/PVr+BqI32hocwVcQ49L8yELBp4BkCpeoKrh8b+y4o4kK4Di+P/RvNEcpYp2Q/tNggBnHgjqVHI6CK5kAjzJCdZetaRbDd4rG522bntBUZaCx/vym7gLIKiombdog222GQxk95q6oPhS6OvYnDxG8tyrBf4kli5Fgrlr63fRitEHkB5J1IowNvNXHgrS2/bXTvzksLAcQv2OL7tnBCZiMfBuSog1A6/vCh2I2JGYkome7Sj8C1gzt6tK66uUXlmSoBeUL+H2de1oB+0XE8qb+yJX6rKm2jZrNYwXwrqgamCS6OnzmPwD8BleyOtVvS5nmw4b861Ee2fITHLjtyzZh2HktqYqL8a9ybfvq9K0hvvkPxfrgm80zXMdqUOAQT7SyYB82e+PK8oOXB53ap3QDmmZqA5FkSkrwUHadjbpZbSR+9pmg+A1v67WDnucK4flyz2P4GEAB5N1qn608oJvWnrMTa2ISqiphMGEMPROK9wR/DFzeEk5TNQYPa8OayY/Blqxp3YtN3jgDvrBrzC6aPq66amjrvo5dvo=
   app: resties
   skip_cleanup: true
